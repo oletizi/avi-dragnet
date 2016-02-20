@@ -35,4 +35,23 @@ public class FeedReader {
       throw new IOException(e);
     }
   }
+
+  public static void main(String[] args) throws Exception {
+    if (args.length < 1) {
+      System.out.println(usage());
+      return;
+    }
+    final URL url = new URL(args[0]);
+    final FeedReader reader = new FeedReader(url);
+
+
+  }
+
+  private static String usage() {
+    final StringBuilder out = new StringBuilder();
+    out.append("FeedReader -- An RSS feed reader with filters.\n\n");
+    out.append("Usage:\n\n");
+    out.append("\t java " + FeedReader.class.getName() + " <feed url>\n");
+    return out.toString();
+  }
 }
