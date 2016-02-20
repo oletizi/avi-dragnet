@@ -11,7 +11,11 @@ public class RegexFilter implements FeedFilter {
   private final Pattern pattern;
 
   public RegexFilter(final String regex) {
-    this.pattern = Pattern.compile(regex);
+    this(Pattern.compile(regex));
+  }
+
+  public RegexFilter(final Pattern pattern) {
+    this.pattern = pattern;
   }
 
   @Override
