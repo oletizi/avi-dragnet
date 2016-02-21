@@ -7,9 +7,9 @@ public class Mesos extends AbstractVendorFilter {
   public Mesos() {
     setFilter(
         new And()
-            .add(pattern("mesos"))
+            .add(pattern(".*mesos.*"))
             .add(new Or()
-                .add(pattern("load\\s*balanc"))
-                .add(pattern("service\\s+discovery"))));
+                .add(pattern(".*load\\s*balanc.+"))
+                .add(pattern(".*service\\s*discovery.*"))));
   }
 }

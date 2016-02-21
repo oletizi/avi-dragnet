@@ -7,10 +7,10 @@ public class OpenShift extends AbstractVendorFilter {
 
   public OpenShift() {
     setFilter(new And()
-        .add(pattern("open\\s*shift"))
+        .add(pattern(".*open\\s*shift.*"))
         .add(new Or()
-            .add(pattern("load\\s*balanc"))
-            .add(pattern("f5"))));
+            .add(pattern(".*load\\s*balanc.*"))
+            .add(pattern(".*f5.*"))));
   }
 
 }

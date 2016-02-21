@@ -6,9 +6,9 @@ public class Avi extends AbstractVendorFilter {
 
   public Avi() {
     setFilter(new Or()
-        .add(pattern("avi network"))
-        .add(pattern("load\\s*balanc"))
-        .add(pattern("reverse\\s+proxy"))
-        .add(pattern("haproxy")));
+        .add(pattern(".*avi\\s+network.+"))
+        .add(pattern(".*load\\s*balanc.*"))
+        .add(pattern(".*reverse\\s+prox.+"))
+        .add(pattern(".*haprox.+")));
   }
 }
