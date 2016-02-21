@@ -1,6 +1,7 @@
-package com.orionletizi.avi.dragnet.rss.filters.vendor;
+package com.orionletizi.avi.dragnet.rss.filters;
 
 import com.orionletizi.avi.dragnet.rss.FeedFilter;
+import com.orionletizi.avi.dragnet.rss.filters.vendor.*;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
 import org.junit.Before;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class VendorFilterTest {
+public class DragnetFilterTest {
 
   private SyndEntry entry;
   private List<SyndContent> contents;
@@ -31,46 +32,79 @@ public class VendorFilterTest {
   }
 
   @Test
-  public void testAWS() throws Exception {
+  public void testDragnet() throws Exception {
+    filter = new DragnetFilter();
 
-    final AmazonWebServices aws = new AmazonWebServices();
-    assertNull(aws.filter(entry));
+    before();
+    testAPIC();
+
+    before();
+    testAvi();
+
+    before();
+    testAWS();
+
+    before();
+    testCloudFoundry();
+
+    before();
+    testMesos();
+
+    before();
+    testOpenShift();
+
+    before();
+    testOpenStack();
+  }
+
+  @Test
+  public void testAWS() throws Exception {
+    filter = new AmazonWebServices();
+    doAWSTest();
+  }
+
+  private void doAWSTest() {
+    assertNull(filter.filter(entry));
 
     when(entry.getTitle()).thenReturn("The title");
 
-    assertNull(aws.filter(entry));
+    assertNull(filter.filter(entry));
 
     when(entry.getTitle()).thenReturn("Amazon");
-    assertNull(aws.filter(entry));
+    assertNull(filter.filter(entry));
 
     when(entry.getTitle()).thenReturn("Amazon web services");
-    assertNull(aws.filter(entry));
+    assertNull(filter.filter(entry));
 
     when(content.getValue()).thenReturn("Elastic Load Balancer");
     when(entry.getContents()).thenReturn(contents);
 
-    assertEquals(entry, aws.filter(entry));
+    assertEquals(entry, filter.filter(entry));
 
     when(content.getValue()).thenReturn("elb");
-    assertEquals(entry, aws.filter(entry));
+    assertEquals(entry, filter.filter(entry));
 
     when(content.getValue()).thenReturn("f5");
-    assertEquals(entry, aws.filter(entry));
+    assertEquals(entry, filter.filter(entry));
 
     when(content.getValue()).thenReturn("");
-    assertNull(aws.filter(entry));
+    assertNull(filter.filter(entry));
 
     when(entry.getTitle()).thenReturn("aws f5");
-    assertEquals(entry, aws.filter(entry));
+    assertEquals(entry, filter.filter(entry));
 
     when(entry.getTitle()).thenReturn("alkdfjo jskfjle");
     when(content.getValue()).thenReturn("Elastic Load Balancer AWS");
-    assertEquals(entry, aws.filter(entry));
+    assertEquals(entry, filter.filter(entry));
   }
 
   @Test
   public void testAPIC() throws Exception {
     filter = new APIC();
+    doAPICTest();
+  }
+
+  private void doAPICTest() {
     assertNegative();
 
     setTitle("Something about apic");
@@ -100,6 +134,10 @@ public class VendorFilterTest {
   @Test
   public void testAvi() throws Exception {
     filter = new Avi();
+    doAviTest();
+  }
+
+  private void doAviTest() {
     assertNegative();
 
     setTitle("AVI");
@@ -121,6 +159,10 @@ public class VendorFilterTest {
   @Test
   public void testCloudFoundry() throws Exception {
     filter = new CloudFoundry();
+    doCloudFoundryTest();
+  }
+
+  private void doCloudFoundryTest() {
     assertNegative();
 
     setTitle("Something about CloudFoundry");
@@ -134,6 +176,10 @@ public class VendorFilterTest {
   @Test
   public void testMesos() throws Exception {
     filter = new Mesos();
+    doMesosTest();
+  }
+
+  private void doMesosTest() {
     assertNegative();
 
     setTitle("Something about mesos");
@@ -152,6 +198,10 @@ public class VendorFilterTest {
   @Test
   public void testOpenShift() throws Exception {
     filter = new OpenShift();
+    doOpenShiftTest();
+  }
+
+  private void doOpenShiftTest() {
     assertNegative();
 
     setTitle("Something OpenShift in the title");
@@ -165,6 +215,34 @@ public class VendorFilterTest {
 
     setTitle("nothing that matches");
     assertNegative();
+  }
+
+  @Test
+  public void testOpenStack() throws Exception {
+    filter = new OpenStack();
+    doOpenStackTest();
+  }
+
+  private void doOpenStackTest() {
+    assertNegative();
+
+    setTitle("Something about openstack in the title");
+    assertNegative();
+
+    setContent("something about lbaas in the content");
+    assertPositive();
+
+    setContent("something about octavia in the content");
+    assertPositive();
+
+    setContent("Somethign baout F5");
+    assertPositive();
+
+    setContent("Someting about a10");
+    assertPositive();
+
+    setContent("Something about radwarei in the content");
+    assertPositive();
   }
 
   private void setTitle(final String s) {

@@ -6,12 +6,12 @@ import com.orionletizi.avi.dragnet.rss.filters.Or;
 public class OpenStack extends AbstractVendorFilter {
   public OpenStack() {
     setFilter(
-        new And().add(pattern("open\\s*stack"))
+        new And().add(pattern(".*open\\s*stack.*"))
             .add(new Or()
-                .add(pattern("LBaaS"))
-                .add(pattern("Octavia"))
-                .add(pattern("f5"))
-                .add(pattern("a10"))
-                .add(pattern("radware"))));
+                .add(pattern(".*LBaaS.*"))
+                .add(pattern(".*Octavia.*"))
+                .add(pattern(".*f5.*"))
+                .add(pattern(".*a10.*"))
+                .add(pattern(".*radware.*"))));
   }
 }
