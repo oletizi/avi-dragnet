@@ -20,14 +20,21 @@ public class RegexFilter implements FeedFilter {
 
   @Override
   public SyndEntry filter(final SyndEntry entry) {
-    if (pattern.matcher(entry.getTitle()).matches()) {
+
+
+    if (entry.getTitle() != null && pattern.matcher(entry.getTitle()).matches()) {
       return entry;
     }
     for (SyndContent content : entry.getContents()) {
-      if (pattern.matcher(content.getValue()).matches()) {
+      info("Checking: " + content.getValue() + "; match: " + pattern.matcher(content.getValue()).matches() + "; pattern: " + pattern);
+      if (content.getValue() != null && pattern.matcher(content.getValue()).matches()) {
         return entry;
       }
     }
     return null;
+  }
+
+  private void info(Object msg) {
+    //System.out.println(getClass().getSimpleName() + ": " + msg);
   }
 }

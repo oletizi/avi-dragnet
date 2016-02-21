@@ -9,11 +9,11 @@ public class AmazonWebServices extends AbstractVendorFilter {
     setFilter(
         new And()
             .add(new Or()
-                .add(pattern("aws"))
-                .add(pattern("amazon\\s*web\\s*services")))
+                .add(pattern(".*aws.*"))
+                .add(pattern(".*amazon\\s*web\\s*services.*")))
             .add(new Or()
-                .add(pattern("elb"))
-                .add(pattern("elastic\\s+load\\s*balanc"))
-                .add(pattern("f5"))));
+                .add(pattern(".*elb.*"))
+                .add(pattern(".*elastic\\s+load\\s+balanc.+"))
+                .add(pattern(".*f5.*"))));
   }
 }
