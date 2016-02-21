@@ -8,12 +8,12 @@ public class APIC extends AbstractVendorFilter {
   public APIC() {
     setFilter(
         new And()
-            .add(pattern("apic"))
+            .add(pattern(".*apic.*"))
             .add(new Or()
-                .add(pattern("load\\s*balanc"))
-                .add(pattern("f5"))
-                .add(pattern("citrix"))
-                .add(pattern("a10"))));
+                .add(pattern(".*load\\s*balanc.+"))
+                .add(pattern(".*f5.*"))
+                .add(pattern(".*citrix.*"))
+                .add(pattern(".*a10.*"))));
   }
 
 }

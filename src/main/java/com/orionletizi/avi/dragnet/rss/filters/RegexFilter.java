@@ -26,7 +26,6 @@ public class RegexFilter implements FeedFilter {
       return entry;
     }
     for (SyndContent content : entry.getContents()) {
-      info("Checking: " + content.getValue() + "; match: " + pattern.matcher(content.getValue()).matches() + "; pattern: " + pattern);
       if (content.getValue() != null && pattern.matcher(content.getValue()).matches()) {
         return entry;
       }
