@@ -1,6 +1,7 @@
 package com.orionletizi.avi.dragnet.rss;
 
 import com.orionletizi.avi.dragnet.rss.filters.And;
+import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
 import com.orionletizi.avi.dragnet.rss.filters.Or;
 import com.orionletizi.avi.dragnet.rss.filters.RegexFilter;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -40,69 +41,6 @@ public class FeedReader {
     }
   }
 
-//  function matches(text) {
-//    if (text
-//        &&
-//
-//   (   text.match(/avi network/gi)
-//    || text.match(/load\s*balanc/gi)
-//    || text.match(/loadbalanc/gi)
-//    || text.match(/reverse\s+proxy/gi)
-//    || text.match(/haproxy/gi)
-//    ||
-//       (text.match(/open\s*stack/gi)
-//        &&
-//          (   text.match(/LBaaS/gi)
-//           || text.match(/Octavia/gi)
-//           || text.match(/f5/gi)
-//           || text.match(/citrix/gi)
-//           || text.match(/a10/gi)
-//           || text.match(/radware/gi)
-//          )
-//       )
-//    || (
-//        text.match(/mesos/gi)
-//        && (
-//               text.match(/load\s*balanc/gi)
-//            || text.match(/service\s+discovery/gi)
-//           )
-//       )
-//    || (
-//        text.match(/apic/gi)
-//        && (
-//               text.match(/load\s*balanc/gi)
-//            || text.match(/f5/gi)
-//            || text.match(/citrix/gi)
-//            || text.match(/a10/gi)
-//           )
-//       )
-//    || (
-//         (
-//             text.match(/aws/gi)
-//          || text.match(/amazon\s*web\s*services/gi)
-//         )
-//         && (
-//                text.match(/elb/gi)
-//             || text.match(/elastic\s+load\s*balanc/gi)
-//             || text.match(/f5/)
-//            )
-//       )
-//    || (
-//         text.match(/cloud\s*foundry/gi)
-//         && (
-//                text.match(/load\s*balanc/gi)
-//             || text.match(/f5/gi)
-//            )
-//       )
-//    || (
-//        text.match(/open\s*shift/gi)
-//        && (
-//               text.match(/load\s*balanc/gi)
-//            || text.match(/f5/gi)
-//           )
-//       )
-//    )
-// )
 
   public static void main(String[] args) throws Exception {
     if (args.length < 1) {
@@ -112,17 +50,7 @@ public class FeedReader {
     final URL url = new URL(args[0]);
     final FeedReader reader = new FeedReader(url);
 
-    final FeedFilter filter = new Or()
-        .add(pattern("avi network"))
-        .add(pattern("load\\s*balanc"))
-        .add(pattern("reverse\\s+proxy"))
-        .add(pattern("haproxy"))
-        .add(openstack())
-        .add(mesos())
-        .add(apic())
-        .add(aws())
-        .add(cloudfoundry())
-        .add(openshift());
+    final FeedFilter filter = new DragnetFilter();
     System.out.print(reader.read(filter));
   }
 

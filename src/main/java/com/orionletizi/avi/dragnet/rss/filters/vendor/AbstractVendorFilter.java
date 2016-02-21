@@ -15,7 +15,7 @@ public abstract class AbstractVendorFilter implements FeedFilter {
   }
 
   protected RegexFilter pattern(final String pattern) {
-    return new RegexFilter(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE));
+    return new RegexFilter(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL));
   }
 
   @Override

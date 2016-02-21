@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
-<channel>
-<title>Conversations via Orion Letizi on Inoreader</title>
-<link>http://www.inoreader.com/stream/user/1005620749/tag/Conversations/view/html</link>
-<description><![CDATA[]]></description>
-<language>en-US</language>
-<lastBuildDate>Fri, 19 Feb 2016 22:11:56 +0000</lastBuildDate>
-<pubDate>Fri, 19 Feb 2016 22:11:56 +0000</pubDate>
-<atom:link href="http://www.inoreader.com/stream/user/1005620749/tag/Conversations" rel="self" type="application/rss+xml"></atom:link>
-<generator>Inoreader (https://www.inoreader.com)</generator>
-<item>
-<title>Does anyone have experience kickstarting &quot;Notes&quot; into WorkFront/AtTask?</title>
-<link>http://stackoverflow.com/questions/35515858/does-anyone-have-experience-kickstarting-notes-into-workfront-attask</link>
-<description><![CDATA[<p>Does anyone have experience kickstarting information into the "Updates" field within projects and tasks? I've been using the "Notes" template and have been getting errors regarding the ObjID. I'm just not sure what information goes into each required field.</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>jcole</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac75</guid>
-</item>
-<item>
-<title>Spotify Randomize Playlist Button</title>
-<link>http://stackoverflow.com/questions/35515857/spotify-randomize-playlist-button</link>
-<description><![CDATA[<p>With all of the Spotify randomization questions and related updates, this seems like a super overdone and already dealt with issue.  The problem however, is that I believe that the great devs over at Spotify have answered the wrong question.  From what I read on their site, they seem to think that the problem with the random is that the same artist is played multiple times in a row, while the actual issue, is that a small portion of the songs seem to have a priority over others and are played many more times than the others.</p> 
+  <channel>
+    <title>Conversations via Orion Letizi on Inoreader</title>
+    <link>http://www.inoreader.com/stream/user/1005620749/tag/Conversations/view/html</link>
+    <description><![CDATA[]]></description>
+    <language>en-US</language>
+    <lastBuildDate>Fri, 19 Feb 2016 22:11:56 +0000</lastBuildDate>
+    <pubDate>Fri, 19 Feb 2016 22:11:56 +0000</pubDate>
+    <atom:link href="http://www.inoreader.com/stream/user/1005620749/tag/Conversations" rel="self"
+               type="application/rss+xml"></atom:link>
+    <generator>Inoreader (https://www.inoreader.com)</generator>
+    <item>
+      <title>stuff about avi networks
+        some other stuff that doesn't matter
+      </title>
+      <link>
+        http://stackoverflow.com/questions/35515858/does-anyone-have-experience-kickstarting-notes-into-workfront-attask
+      </link>
+      <description>
+        <![CDATA[<p>Does anyone have experience kickstarting information into the "Updates" field within projects and tasks? I've been using the "Notes" template and have been getting errors regarding the ObjID. I'm just not sure what information goes into each required field.</p>]]></description>
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>jcole</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac75</guid>
+    </item>
+    <item>
+      <title>Spotify Randomize Playlist Button</title>
+      <link>http://stackoverflow.com/questions/35515857/spotify-randomize-playlist-button</link>
+      <description><![CDATA[<p>With all of the Spotify randomization questions and related updates, this seems like a super overdone and already dealt with issue.  The problem however, is that I believe that the great devs over at Spotify have answered the wrong question.  From what I read on their site, they seem to think that the problem with the random is that the same artist is played multiple times in a row, while the actual issue, is that a small portion of the songs seem to have a priority over others and are played many more times than the others.</p>
  
 <p>The issue, is that when I have a playlist with 500 or so songs in it, the same 50 play over and over again, and if I throw in a one off artist in there, they are never heard.  A good 95% of my listening time with Spotify has been the same 50 songs.  I have read through their blog posts about their shuffle feature and believe there might be an issue with certain songs receiving more of a priority over others.</p> 
  
@@ -35,16 +41,18 @@
 <p>I really think that this feature would be a welcome addition to Spotify, and it would solve many users annoyance with the apparent favoritism to a list of songs while using the shuffle play feature.  I love music, and I really love the Spotify app, and as such, I listen to many, many hours of music a week.  This small feature would fix one of my only gripes with the software and would greatly improve my experience. </p> 
  
 <p>Thanks :D  </p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Justin DaCosta</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac67</guid>
-</item>
-<item>
-<title>Is it correct to edit the files inside vendor folder of laravel 5.2 as per our needs?</title>
-<link>http://stackoverflow.com/questions/35515852/is-it-correct-to-edit-the-files-inside-vendor-folder-of-laravel-5-2-as-per-our-n</link>
-<description><![CDATA[<p>Im new to laravel and is doing a sample project as study purpose. I had created authentication using the command:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Justin DaCosta</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac67</guid>
+    </item>
+    <item>
+      <title>Is it correct to edit the files inside vendor folder of laravel 5.2 as per our needs?</title>
+      <link>
+        http://stackoverflow.com/questions/35515852/is-it-correct-to-edit-the-files-inside-vendor-folder-of-laravel-5-2-as-per-our-n
+      </link>
+      <description><![CDATA[<p>Im new to laravel and is doing a sample project as study purpose. I had created authentication using the command:</p>
  
 <pre><code>php artisan make:auth  
 </code></pre> 
@@ -69,16 +77,16 @@
 </code></pre> 
  
 <p>i had changed the /home to /admin in the above said file and my issue regarding the redirection after successful password reset got fixed. But i dont know whether it is the correct method or not?? Is it correct way to edit the files inside the vendor folder like as i did above?? Please help me. Thanks in advance.</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Mahesh A R</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac65</guid>
-</item>
-<item>
-<title>Print each word from this sentence</title>
-<link>http://stackoverflow.com/questions/35515851/print-each-word-from-this-sentence</link>
-<description><![CDATA[<p>I have the following sentence:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Mahesh A R</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac65</guid>
+    </item>
+    <item>
+      <title>Print each word from this sentence</title>
+      <link>http://stackoverflow.com/questions/35515851/print-each-word-from-this-sentence</link>
+      <description><![CDATA[<p>I have the following sentence:</p>
  
 <pre><code>This is a text and we should print each word 
 </code></pre> 
@@ -138,16 +146,20 @@ A possible solution is to add " " at the end and it will work, but I don't want 
 <p>Also, can you please provide a better solution for this.</p> 
  
 <p>Thanks...</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Laurenţiu Roşu</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac60</guid>
-</item>
-<item>
-<title>How to limit the column width for the html tabular data that is rendered from xml that has xsl as reference</title>
-<link>http://stackoverflow.com/questions/35515847/how-to-limit-the-column-width-for-the-html-tabular-data-that-is-rendered-from-xm</link>
-<description><![CDATA[<p></p><div> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Laurenţiu Roşu</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac60</guid>
+    </item>
+    <item>
+      <title>How to limit the column width for the html tabular data that is rendered from xml that has xsl as
+        reference
+      </title>
+      <link>
+        http://stackoverflow.com/questions/35515847/how-to-limit-the-column-width-for-the-html-tabular-data-that-is-rendered-from-xm
+      </link>
+      <description><![CDATA[<p></p><div>
 <div> 
 <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format"&gt; 
@@ -190,16 +202,16 @@ I would very much appreciate if someone could let me know how to limit the colum
  
 <p>Thanks, 
 Ashley</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Ashley</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5e</guid>
-</item>
-<item>
-<title>Does a &quot;PlaceHolder&quot; option exists in Doxygen</title>
-<link>http://stackoverflow.com/questions/35515845/does-a-placeholder-option-exists-in-doxygen</link>
-<description><![CDATA[<p>I am try to have the following:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Ashley</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5e</guid>
+    </item>
+    <item>
+      <title>Does a &quot;PlaceHolder&quot; option exists in Doxygen</title>
+      <link>http://stackoverflow.com/questions/35515845/does-a-placeholder-option-exists-in-doxygen</link>
+      <description><![CDATA[<p>I am try to have the following:</p>
  
 <pre><code>/** 
  * \someTag the test result is: [value] 
@@ -211,16 +223,16 @@ Ashley</p>]]></description>
 <p>I have searched everywhere and it does not seems to be possible. Can someone confirm?</p> 
  
 <p>Thank you</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Rana</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5d</guid>
-</item>
-<item>
-<title>Loop through list of dicts in jinja2</title>
-<link>http://stackoverflow.com/questions/35515844/loop-through-list-of-dicts-in-jinja2</link>
-<description><![CDATA[<pre><code>[ 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Rana</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5d</guid>
+    </item>
+    <item>
+      <title>Loop through list of dicts in jinja2</title>
+      <link>http://stackoverflow.com/questions/35515844/loop-through-list-of-dicts-in-jinja2</link>
+      <description><![CDATA[<pre><code>[
   { 
     "ipAddress": "X.X.X.X", 
     "score": "1000", 
@@ -246,16 +258,18 @@ Ashley</p>]]></description>
 </code></pre> 
  
 <p>This only gives the last dictionaries entries. Any advice would be greatly appreciated. </p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Strobe_</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5a</guid>
-</item>
-<item>
-<title>Does IDbDependencyResolver only work with parameterless constructors?</title>
-<link>http://stackoverflow.com/questions/35515843/does-idbdependencyresolver-only-work-with-parameterless-constructors</link>
-<description><![CDATA[<p>I've been trying to inject a service into my IDbInterceptor using <a href="https://github.com/rowanmiller/Demo-EF6Advanced/blob/master/CompletedSourceCode/AdventureWorks/Global.asax.cs">this</a> example. Resolving the interceptor with its dependencies (ITenantContext) works fine as long as I don't register AutofacDbDependencyResolver with DbConfiguration.</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Strobe_</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac5a</guid>
+    </item>
+    <item>
+      <title>Does IDbDependencyResolver only work with parameterless constructors?</title>
+      <link>
+        http://stackoverflow.com/questions/35515843/does-idbdependencyresolver-only-work-with-parameterless-constructors
+      </link>
+      <description><![CDATA[<p>I've been trying to inject a service into my IDbInterceptor using <a href="https://github.com/rowanmiller/Demo-EF6Advanced/blob/master/CompletedSourceCode/AdventureWorks/Global.asax.cs">this</a> example. Resolving the interceptor with its dependencies (ITenantContext) works fine as long as I don't register AutofacDbDependencyResolver with DbConfiguration.</p>
  
 <p>However when I do I get the error <code>An exception was thrown while invoking the constructor 'Void .ctor()' on type 'DMDbContext'. ---&gt; ValueFactory attempted to access the Value property of this instance.</code>. The error does not appear if I change my ITenantContext to use a parameterless constructor but that defeats the whole purpose of DI.</p> 
  
@@ -310,29 +324,29 @@ DbConfiguration.Loaded += (s, e) =&gt;
     } 
 } 
 </code></pre>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Gabriel Smoljár</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac59</guid>
-</item>
-<item>
-<title>PHP session for guest user</title>
-<link>http://stackoverflow.com/questions/35515816/php-session-for-guest-user</link>
-<description><![CDATA[<p>I want to define a PHP session for every guest users and based on that session I want to choose from a key/value array. 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Gabriel Smoljár</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac59</guid>
+    </item>
+    <item>
+      <title>PHP session for guest user</title>
+      <link>http://stackoverflow.com/questions/35515816/php-session-for-guest-user</link>
+      <description><![CDATA[<p>I want to define a PHP session for every guest users and based on that session I want to choose from a key/value array.
 Every time that one guest user press a button, an element from that array should be choosed. </p> 
  
 <p>How can I do it?</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>alone</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac57</guid>
-</item>
-<item>
-<title>Can't Stop A Runnable That Is Not Assigned To Variable</title>
-<link>http://stackoverflow.com/questions/35515788/cant-stop-a-runnable-that-is-not-assigned-to-variable</link>
-<description><![CDATA[<p>I started a runnnable but did not assign it to a variable. How do I stop it? I know it is a combination of the removeCallbacksAndMessages() method, but I do not know what parameter to pass in to this method since I created an anonymous runnable:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>alone</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac57</guid>
+    </item>
+    <item>
+      <title>Can't Stop A Runnable That Is Not Assigned To Variable</title>
+      <link>http://stackoverflow.com/questions/35515788/cant-stop-a-runnable-that-is-not-assigned-to-variable</link>
+      <description><![CDATA[<p>I started a runnnable but did not assign it to a variable. How do I stop it? I know it is a combination of the removeCallbacksAndMessages() method, but I do not know what parameter to pass in to this method since I created an anonymous runnable:</p>
  
 <pre><code>mStartButton.setOnClickListener(new View.OnClickListener() { 
         @Override 
@@ -378,16 +392,17 @@ Every time that one guest user press a button, an element from that array should
         } 
     }); 
 </code></pre>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>tccpg288</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac56</guid>
-</item>
-<item>
-<title>Indexing list to find duplicate characters in string (Python)</title>
-<link>http://stackoverflow.com/questions/35515750/indexing-list-to-find-duplicate-characters-in-string-python</link>
-<description><![CDATA[<p>So my program is asking the user to input a list of strings and then sort out the strings where if the first letter is repeated again in the same string, it stores it into another list. Here is what I have so far.</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>tccpg288</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac56</guid>
+    </item>
+    <item>
+      <title>Indexing list to find duplicate characters in string (Python)</title>
+      <link>http://stackoverflow.com/questions/35515750/indexing-list-to-find-duplicate-characters-in-string-python
+      </link>
+      <description><![CDATA[<p>So my program is asking the user to input a list of strings and then sort out the strings where if the first letter is repeated again in the same string, it stores it into another list. Here is what I have so far.</p>
  
 <pre><code>iput = [] 
 i = 0 
@@ -414,16 +429,16 @@ print(iput)
 </code></pre> 
  
 <p>I keep getting a "string index out of range" error and can't think of a way to add the strings that have the requirements stated above. Any suggestions?</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>bulletss</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac53</guid>
-</item>
-<item>
-<title>Lua doesn't print True values</title>
-<link>http://stackoverflow.com/questions/35515705/lua-doesnt-print-true-values</link>
-<description><![CDATA[<p>I have such an anonymous Lua function:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>bulletss</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac53</guid>
+    </item>
+    <item>
+      <title>Lua doesn't print True values</title>
+      <link>http://stackoverflow.com/questions/35515705/lua-doesnt-print-true-values</link>
+      <description><![CDATA[<p>I have such an anonymous Lua function:</p>
  
 <pre><code>an_func = function(x) return x == nil end 
 </code></pre> 
@@ -448,16 +463,16 @@ end
 <p>Can you explain, why did Lua print all results, but <code>true</code>? How can I fix the snipped make it output all 4 lines?</p> 
  
 <p>P.S. I'm newbee in Lua.</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>VeLKerr</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac52</guid>
-</item>
-<item>
-<title>Php variable increament</title>
-<link>http://stackoverflow.com/questions/35515704/php-variable-increament</link>
-<description><![CDATA[<p>So i have the following code that works and outputs the information lets say 2 11. I would like to have $keyidcall increment in variable name so $keyidcall2, $keyidcall3....... with the additional variables I would like the variable to hold the correct value so I can call it later. so expected output would be $Apiammount ="2"; 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>VeLKerr</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac52</guid>
+    </item>
+    <item>
+      <title>Php variable increament</title>
+      <link>http://stackoverflow.com/questions/35515704/php-variable-increament</link>
+      <description><![CDATA[<p>So i have the following code that works and outputs the information lets say 2 11. I would like to have $keyidcall increment in variable name so $keyidcall2, $keyidcall3....... with the additional variables I would like the variable to hold the correct value so I can call it later. so expected output would be $Apiammount ="2";
 echo $keyidcall; would echo 2 
 echo $keyidcall: would echo 11</p> 
  
@@ -471,16 +486,18 @@ echo $keyidcall: would echo 11</p>
     $Apiammount--; 
 } 
 </code></pre>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>James Gerstenberg</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4f</guid>
-</item>
-<item>
-<title>I'm trying to count the number of lines in my file but my counter prints out 0 every time</title>
-<link>http://stackoverflow.com/questions/35515626/im-trying-to-count-the-number-of-lines-in-my-file-but-my-counter-prints-out-0-e</link>
-<description><![CDATA[<pre><code>#include &lt;iostream&gt; 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>James Gerstenberg</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4f</guid>
+    </item>
+    <item>
+      <title>I'm trying to count the number of lines in my file but my counter prints out 0 every time</title>
+      <link>
+        http://stackoverflow.com/questions/35515626/im-trying-to-count-the-number-of-lines-in-my-file-but-my-counter-prints-out-0-e
+      </link>
+      <description><![CDATA[<pre><code>#include &lt;iostream&gt;
 #include &lt;fstream&gt; 
  
 using namespace std; 
@@ -527,16 +544,17 @@ void get_input (ifstream&amp; ifile){
 </code></pre> 
  
 <p>I changed it to std::string, but the counter still prints out 0. I am taking int data from a file that has 2 columns. I also need to count the number of lines in the file.</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Maya Pelichet</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4d</guid>
-</item>
-<item>
-<title>SQL query to get a bin with the smallest amount of an item</title>
-<link>http://stackoverflow.com/questions/35515546/sql-query-to-get-a-bin-with-the-smallest-amount-of-an-item</link>
-<description><![CDATA[<p>I have a Table that looks like this:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Maya Pelichet</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4d</guid>
+    </item>
+    <item>
+      <title>SQL query to get a bin with the smallest amount of an item</title>
+      <link>http://stackoverflow.com/questions/35515546/sql-query-to-get-a-bin-with-the-smallest-amount-of-an-item
+      </link>
+      <description><![CDATA[<p>I have a Table that looks like this:</p>
  
 <pre><code>|Bin    |Item       |Amnt 
 |-------|-----------|---- 
@@ -556,16 +574,16 @@ void get_input (ifstream&amp; ifile){
  
 <p>it looks easy, but grouping is tricky. 
 does anyone have a suggestion?</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Erick Viera</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4c</guid>
-</item>
-<item>
-<title>Android currentTimeMillis value not updating</title>
-<link>http://stackoverflow.com/questions/35515484/android-currenttimemillis-value-not-updating</link>
-<description><![CDATA[<p>I'm trying to send multiple SMS messages and I need to know when each one of them is sent/delivered. 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Erick Viera</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4c</guid>
+    </item>
+    <item>
+      <title>Android currentTimeMillis value not updating</title>
+      <link>http://stackoverflow.com/questions/35515484/android-currenttimemillis-value-not-updating</link>
+      <description><![CDATA[<p>I'm trying to send multiple SMS messages and I need to know when each one of them is sent/delivered.
 The code seems to work well, except the <strong>currentTimeMillis</strong> function I use to identify each message. I do this by passing the timestamp using intent's putExtra. 
 Oddly, all the messages get the same initial timestamp. 
 What am I getting wrong?</p> 
@@ -656,16 +674,16 @@ private void sendSMS(String phoneNumber, String message){
     sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI); 
 } 
 </code></pre>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>ion</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4a</guid>
-</item>
-<item>
-<title>Nested for-loop element-wise list comparison</title>
-<link>http://stackoverflow.com/questions/35515482/nested-for-loop-element-wise-list-comparison</link>
-<description><![CDATA[<p>As a novel approach to solving my challenge described <a href="http://stackoverflow.com/q/35513457/1389110">here</a>, I have put together the following:</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>ion</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac4a</guid>
+    </item>
+    <item>
+      <title>Nested for-loop element-wise list comparison</title>
+      <link>http://stackoverflow.com/questions/35515482/nested-for-loop-element-wise-list-comparison</link>
+      <description><![CDATA[<p>As a novel approach to solving my challenge described <a href="http://stackoverflow.com/q/35513457/1389110">here</a>, I have put together the following:</p>
  
 <pre><code>from difflib import SequenceMatcher 
  
@@ -707,16 +725,18 @@ compensation/public disability offset ends for disability beneficiaries from age
 <p>So it's correctly detecting that the first two sentences are similar, and that the last is unique. The problem is it's then going back and deeming the first sentence to be unique (which it isn't, and it should not be returning to this sentence anyway). </p> 
  
 <p>Where's the flaw in my looping logic? Can this be achieved without nested <code>for</code>s and removal of elements?</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Pyderman</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac49</guid>
-</item>
-<item>
-<title>Iterate through two lists simultaneously and remove from one if exists in the other</title>
-<link>http://stackoverflow.com/questions/35515474/iterate-through-two-lists-simultaneously-and-remove-from-one-if-exists-in-the-ot</link>
-<description><![CDATA[<p>I need to check if the ID of a <code>similar</code> result exists in the <code>exact</code> results already and then exclude that result, I'm just unsure of the best way to do so.</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Pyderman</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac49</guid>
+    </item>
+    <item>
+      <title>Iterate through two lists simultaneously and remove from one if exists in the other</title>
+      <link>
+        http://stackoverflow.com/questions/35515474/iterate-through-two-lists-simultaneously-and-remove-from-one-if-exists-in-the-ot
+      </link>
+      <description><![CDATA[<p>I need to check if the ID of a <code>similar</code> result exists in the <code>exact</code> results already and then exclude that result, I'm just unsure of the best way to do so.</p>
  
 <p>I assume I'd have to find a way to iterate through both lists, then try something like <code>if similar.ID != exact.ID</code> and pass that to a variable to pass to the Jinja2 template.</p> 
  
@@ -733,16 +753,18 @@ similar_assets = Motor.query.filter_by(**similar_filter_data).all()
 </code></pre> 
  
 <p>I know that syntax isn't correct, or even functional with a list or dict (?) but hopefully it is able to express what I'm trying to achieve here.</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>xGlorify</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac48</guid>
-</item>
-<item>
-<title>GetFileFromPathAsync giving &quot;The parameter is incorrect&quot; exception</title>
-<link>http://stackoverflow.com/questions/35515417/getfilefrompathasync-giving-the-parameter-is-incorrect-exception</link>
-<description><![CDATA[<p>I've started to get into Windows Universal Platform programming (Windows 10, VS2015, c#) and hitting some basic issues.. </p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>xGlorify</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac48</guid>
+    </item>
+    <item>
+      <title>GetFileFromPathAsync giving &quot;The parameter is incorrect&quot; exception</title>
+      <link>
+        http://stackoverflow.com/questions/35515417/getfilefrompathasync-giving-the-parameter-is-incorrect-exception
+      </link>
+      <description><![CDATA[<p>I've started to get into Windows Universal Platform programming (Windows 10, VS2015, c#) and hitting some basic issues.. </p>
  
 <p>I have a subfolder in MusicLibrary with a file test.txt in it. At the moment I am forcing GetFileFromPathAsync to be non asych (I'm in early stage of converting an old app to new target so asynch will come in later). Based on some examples the following code should work</p> 
  
@@ -761,16 +783,18 @@ _location is musicLibrary
 <p>Elsewhere in my code I am able to create subfolders and files to musicLibrary and list files there with GetItemsAsync.. But this GetFileFromPathAsync call fails me..</p> 
  
 <p>Please, what is the obvious that everybody else sees immediately -- but evades now my eyes.? </p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>juhariis</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac47</guid>
-</item>
-<item>
-<title>Need access to flask request context &amp; db session after they exit</title>
-<link>http://stackoverflow.com/questions/35514104/need-access-to-flask-request-context-db-session-after-they-exit</link>
-<description><![CDATA[<p>I'm writing a flask app that streams content out to the user, and I'm trying to manipulate the db while this streaming is happening. Here's some example code (simplified):</p> 
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>juhariis</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac47</guid>
+    </item>
+    <item>
+      <title>Need access to flask request context &amp; db session after they exit</title>
+      <link>
+        http://stackoverflow.com/questions/35514104/need-access-to-flask-request-context-db-session-after-they-exit
+      </link>
+      <description><![CDATA[<p>Here's a description with Avi Networks in it. I'm writing a flask app that streams content out to the user, and I'm trying to manipulate the db while this streaming is happening. Here's some example code (simplified):</p>
  
 <pre><code>def work_hard(obj): 
     yield 'About to do a lot of work...' 
@@ -797,11 +821,11 @@ def perform_action(objid):
 <p>If this turns out not to be possible, my backup plan is to stream output from a subprocess, and then in the subprocess I'll connect to the db from there, but I'd prefer to do it all within the same process if possible.</p> 
  
 <p>Thanks!</p>]]></description>
-<pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
-<category>Conversations</category>
-<dc:creator>Robru</dc:creator>
-<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
-<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac46</guid>
-</item>
-</channel>
+      <pubDate>Fri, 19 Feb 2016 22:01:51 +0000</pubDate>
+      <category>Conversations</category>
+      <dc:creator>Robru</dc:creator>
+      <source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+      <guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c04a6ac46</guid>
+    </item>
+  </channel>
 </rss>

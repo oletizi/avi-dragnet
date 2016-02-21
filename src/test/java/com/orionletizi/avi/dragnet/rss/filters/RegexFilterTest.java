@@ -3,10 +3,14 @@ package com.orionletizi.avi.dragnet.rss.filters;
 import com.orionletizi.avi.dragnet.rss.FeedFilter;
 import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -39,5 +43,19 @@ public class RegexFilterTest {
 
     regexFilter = new RegexFilter("^A\\s+content.+");
     assertEquals(entry, regexFilter.filter(entry));
+  }
+
+  @Test
+  public void testFeed() throws Exception {
+    final SyndFeedInput input = new SyndFeedInput();
+    final SyndFeed feed = input.build(new XmlReader(ClassLoader.getSystemResource("rss/sample-feed.xml")));
+    final SyndEntry entry = feed.getEntries().get(0);
+
+    final Pattern pattern = Pattern.compile(".*avi network.*", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+
+    final RegexFilter filter = new RegexFilter(pattern);
+    final SyndEntry filtered = filter.filter(entry);
+    System.out.println("Filtered: " + filtered);
+    assertEquals(entry, filtered);
   }
 }

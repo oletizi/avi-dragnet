@@ -20,10 +20,19 @@ public class RegexFilter implements FeedFilter {
 
   @Override
   public SyndEntry filter(final SyndEntry entry) {
-
-
-    if (entry.getTitle() != null && pattern.matcher(entry.getTitle()).matches()) {
-      return entry;
+    if (entry.getTitle() != null) {
+      final boolean matches = pattern.matcher(entry.getTitle()).matches();
+      info("CHECK TITLE: matches: " + matches + "; pattern: " + pattern + "; title: " + entry.getTitle());
+      if (matches) {
+        return entry;
+      }
+    }
+    if (entry.getDescription() != null) {
+      final boolean matches = pattern.matcher(entry.getDescription().getValue()).matches();
+      info("CHECK DESCRIPTION: matches: " + matches + ", pattern: " + pattern + ", description: " + entry.getDescription().getValue());
+      if (matches) {
+        return entry;
+      }
     }
     for (SyndContent content : entry.getContents()) {
       if (content.getValue() != null && pattern.matcher(content.getValue()).matches()) {
