@@ -5,15 +5,19 @@ import com.rometools.rome.io.FeedException;
 import fi.iki.elonen.SimpleWebServer;
 import fi.iki.elonen.util.ServerRunner;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -72,13 +76,36 @@ public class Service {
   }
 
   public void start() throws IOException, FeedException {
-    final SimpleWebServer server = new SimpleWebServer("dragnet.aviplayground.com", port, webroots, false);
-    info("Starting webserver...");
+
+    final InetAddress inetAddress = guessAddress();
+    if (inetAddress == null) {
+      handleError(new IOException("Unable to find a valid inet address."));
+      return;
+    }
+
+    final SimpleWebServer server = new SimpleWebServer(inetAddress.getHostAddress(), port, webroots, true);
+    log("Starting webserver at address: " + inetAddress.getHostAddress());
     ServerRunner.executeInstance(server);
   }
 
-  private static void info(final String s) {
-    System.out.println(Service.class.getSimpleName() + ": " + s);
+  private InetAddress guessAddress() throws IOException {
+    final InetAddressValidator validator = InetAddressValidator.getInstance();
+    final Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
+    while (ifaces.hasMoreElements()) {
+      final NetworkInterface iface = ifaces.nextElement();
+      //System.out.println("iface: " + iface.getName());
+      final String name = iface.getName();
+      final Enumeration<InetAddress> inetAddresses = iface.getInetAddresses();
+      while (inetAddresses.hasMoreElements()) {
+        final InetAddress inetAddress = inetAddresses.nextElement();
+        if (validator.isValidInet4Address(inetAddress.getHostAddress())) {
+          if (inetAddress.isReachable(5) && !inetAddress.isLoopbackAddress() && !inetAddress.isSiteLocalAddress()) {
+            return inetAddress;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
