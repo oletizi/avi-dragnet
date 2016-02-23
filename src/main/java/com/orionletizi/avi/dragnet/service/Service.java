@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Service {
   private static final DateFormat df = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
-  private static final long REFRESH_PERIOD_IN_MINUTES = 1;
+  private static final long REFRESH_PERIOD_IN_MINUTES = 10;
 
   private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
   private final Dragnet dragnet;
@@ -52,6 +52,7 @@ public class Service {
     this.port = port;
     this.webroots = new ArrayList<>();
     webroots.add(webroot);
+    log("Webroot: " + webroot);
   }
 
   private void handleError(final Throwable e) {
@@ -99,7 +100,7 @@ public class Service {
       while (inetAddresses.hasMoreElements()) {
         final InetAddress inetAddress = inetAddresses.nextElement();
         if (validator.isValidInet4Address(inetAddress.getHostAddress())) {
-          if (inetAddress.isReachable(5) && !inetAddress.isLoopbackAddress() && !inetAddress.isSiteLocalAddress()) {
+          if (inetAddress.isReachable(5) && !inetAddress.isLoopbackAddress()) {
             return inetAddress;
           }
         }
@@ -109,10 +110,12 @@ public class Service {
   }
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
+    File webroot = new File("/tmp");
+    if (args.length > 0) {
+      webroot = new File(args[0]);
+    }
     final List<File> roots = new ArrayList<>();
-    final Service service = new Service(8080, new File("/tmp"));
+    final Service service = new Service(8080, webroot);
     service.start();
-//    final CountDownLatch latch = new CountDownLatch(1);
-//    latch.await();
   }
 }
