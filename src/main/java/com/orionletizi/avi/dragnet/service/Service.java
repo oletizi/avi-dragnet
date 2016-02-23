@@ -2,8 +2,8 @@ package com.orionletizi.avi.dragnet.service;
 
 import com.orionletizi.avi.dragnet.rss.Dragnet;
 import com.rometools.rome.io.FeedException;
+import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.SimpleWebServer;
-import fi.iki.elonen.util.ServerRunner;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -86,7 +86,8 @@ public class Service {
 
     final SimpleWebServer server = new SimpleWebServer(inetAddress.getHostAddress(), port, webroots, true);
     log("Starting webserver at address: " + inetAddress.getHostAddress());
-    ServerRunner.executeInstance(server);
+    //ServerRunner.executeInstance(server);
+    server.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);
   }
 
   private InetAddress guessAddress() throws IOException {
