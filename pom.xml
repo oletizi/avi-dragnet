@@ -4,13 +4,17 @@
 
   <groupId>com.orionletizi</groupId>
   <artifactId>avi-dragnet</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>1.0</version>
 
   <distributionManagement>
     <site>
       <id>www.avinetworks.com</id>
       <url>scp://ubuntu@dragnet.aviplayground.com/home/ubuntu/dragnet-site</url>
     </site>
+    <repository>
+      <id>ssh-repository</id>
+      <url>scp://ubuntu@dragnet.aviplayground.com/home/ubuntu/dragnet-install</url>
+    </repository>
   </distributionManagement>
 
   <build>
@@ -47,7 +51,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.orionletizi.avi.dragnet.rss.FeedReader</mainClass>
+              <mainClass>com.orionletizi.avi.dragnet.service.Service</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
