@@ -72,7 +72,7 @@ public class Service {
   }
 
   public void start() throws IOException, FeedException {
-    final SimpleWebServer server = new SimpleWebServer("localhost", port, webroots, false);
+    final SimpleWebServer server = new SimpleWebServer("dragnet.aviplayground.com", port, webroots, false);
     info("Starting webserver...");
     ServerRunner.executeInstance(server);
   }
