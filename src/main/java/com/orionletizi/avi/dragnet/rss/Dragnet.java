@@ -10,6 +10,7 @@ import com.rometools.rome.io.SyndFeedOutput;
 import com.rometools.rome.io.XmlReader;
 import org.apache.commons.cli.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,8 +22,8 @@ import java.util.List;
 
 public class Dragnet {
 
-  private static URL CONVERSATIONS_URL;
-  private static URL GOOGLE_GROUPS_URL;
+  public static URL CONVERSATIONS_URL;
+  public static URL GOOGLE_GROUPS_URL;
 
   static {
     try {
@@ -37,6 +38,10 @@ public class Dragnet {
   private List<URL> feedUrls;
   private final PrintWriter rawOutput;
   private final PrintWriter filteredOutput;
+
+  public Dragnet(final File rawFile, final File filteredFile) throws IOException, FeedException {
+    this(Arrays.asList(new URL[]{CONVERSATIONS_URL, GOOGLE_GROUPS_URL}), new PrintWriter(new FileWriter(rawFile)), new PrintWriter(new FileWriter(filteredFile)));
+  }
 
   public Dragnet(final List<URL> feedUrls, final PrintWriter rawOutput, final PrintWriter filteredOutput) throws IOException, FeedException {
     this.feedUrls = feedUrls;
