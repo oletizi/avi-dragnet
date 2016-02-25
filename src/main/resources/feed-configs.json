@@ -1,0 +1,72 @@
+[
+  {
+    "feedUrl": "http://feeds.dzone.com/home",
+    "name": "dzone.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj",
+    "name": "infoq.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://feeds.feedburner.com/oreilly/radar/atom",
+    "name": "oreilley-radar.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://forums.oreilly.com/rss/forums/10-oreilly-forums/",
+    "name": "oreilley-forums.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "https://www.quora.com/rss",
+    "name": "quora.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://serverfault.com/feeds",
+    "name": "server-fault.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://stackoverflow.com/feeds/",
+    "name": "stack-overflow.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+((AWS+OR+%22amazon+web+services%22)+AND+(ELB+OR+F5+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22))&format=rss",
+    "name": "ggroups-aws.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+mesos+AND+(%22load+balancing%22+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22service+discovery%22)&format=rss",
+    "name": "ggroups-mesos.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+%22reverse+proxy%22+OR+Nginx+OR+HAProxy&format=rss",
+    "name": "ggroups-nginx-haproxy.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+((%22OpenShift%22+OR+%22open+shift%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22+OR+F5))&format=rss",
+    "name": "ggroups-openshift.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+(OpenStack+OR+%22open+stack%22)++AND+(LBaaS+OR+Octavia+OR+F5+OR+Citrix+OR+A10+OR+Radware)&format=rss",
+    "name": "ggroups-openstack.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+(%22cloud+foundry%22+OR+%22cloudfoundry%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancer%22+OR+%22loadbalancing%22+OR+F5)&format=rss",
+    "name": "ggroups-cloud-foundry.xml",
+    "shouldWrite": true
+  },
+  {
+    "feedUrl": "http://www.bing.com/search?q=site%3Agroups.google.com+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22&format=rss",
+    "name": "ggroups-load-balancer.xml",
+    "shouldWrite": true
+  }
+]

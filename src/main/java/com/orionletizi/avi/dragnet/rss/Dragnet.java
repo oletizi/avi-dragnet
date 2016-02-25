@@ -14,39 +14,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Dragnet {
 
-  public static URL CONVERSATIONS_URL;
-  public static URL GOOGLE_GROUPS_URL;
 
-  static {
-    try {
-      CONVERSATIONS_URL = new URL("http://www.inoreader.com/stream/user/1005620749/tag/Conversations");
-      GOOGLE_GROUPS_URL = new URL("http://www.inoreader.com/stream/user/1005620749/tag/Google%20Groups");
-    } catch (MalformedURLException e) {
-      e.printStackTrace();
-    }
-  }
+  private final DragnetConfig config;
 
-
-  private List<URL> feedUrls;
-  private final PrintWriter rawOutput;
-  private final PrintWriter filteredOutput;
-
-  public Dragnet(final File rawFile, final File filteredFile) throws IOException, FeedException {
-    this(Arrays.asList(new URL[]{CONVERSATIONS_URL, GOOGLE_GROUPS_URL}), new PrintWriter(new FileWriter(rawFile)), new PrintWriter(new FileWriter(filteredFile)));
-  }
-
-  public Dragnet(final List<URL> feedUrls, final PrintWriter rawOutput, final PrintWriter filteredOutput) throws IOException, FeedException {
-    this.feedUrls = feedUrls;
-    this.rawOutput = rawOutput;
-    this.filteredOutput = filteredOutput;
+  public Dragnet(final DragnetConfig config) {
+    this.config = config;
   }
 
   public void read() throws IOException, FeedException {
@@ -54,9 +32,21 @@ public class Dragnet {
     final SyndFeedInput input = new SyndFeedInput();
     final List<SyndEntry> filteredEntries = new ArrayList<>();
     final List<SyndEntry> rawEntries = new ArrayList<>();
+    final SyndFeedOutput feedWriter = new SyndFeedOutput();
+    info("fetching feeds...");
 
-    for (URL url : feedUrls) {
+    for (DragnetConfig.FeedConfig feedConfig : config.getFeeds()) {
+      info("fetching feed: " + feedConfig.getFeedUrl());
+      final URL url = feedConfig.getFeedUrl();
+
       final SyndFeed feed = input.build(new XmlReader(url));
+      if (feedConfig.shouldWrite()) {
+        // write this source feed to local disk
+        final File outfile = new File(config.getWriteRoot(), feedConfig.getName());
+        info("Writing to " + outfile);
+        feedWriter.output(feed, outfile);
+      }
+
       rawEntries.addAll(feed.getEntries());
       for (SyndEntry entry : feed.getEntries()) {
         final SyndEntry filtered = dragnet.filter(entry);
@@ -80,9 +70,17 @@ public class Dragnet {
     rawout.setLink("http://some.other.website.com/");
     rawout.setEntries(rawEntries);
 
-    SyndFeedOutput out = new SyndFeedOutput();
-    out.output(filteredOut, filteredOutput);
-    out.output(rawout, rawOutput);
+    info("Writing filtered feed to " + config.getFilteredOutputFile());
+    feedWriter.output(filteredOut, config.getFilteredOutputFile());
+
+    info("Writing raw feed to " + config.getRawOutputFile());
+    feedWriter.output(rawout, config.getRawOutputFile());
+
+    info("Done reading feeds.");
+  }
+
+  private void info(final String s) {
+    System.out.println(getClass().getSimpleName() + ": " + s);
   }
 
   private static Options getOptions() {
@@ -147,12 +145,9 @@ public class Dragnet {
           return;
         }
       }
-      URL[] urls = {
-          CONVERSATIONS_URL,
-          GOOGLE_GROUPS_URL
-      };
 
-      new Dragnet(Arrays.asList(urls), rawOutput, filteredOutput).read();
+      throw new RuntimeException("Implement Me!");
+//      new Dragnet(Arrays.asList(urls), rawOutput, filteredOutput).read();
 
 
     } catch (ParseException e) {

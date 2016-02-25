@@ -1,6 +1,11 @@
 package com.orionletizi.avi.dragnet.service;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orionletizi.avi.dragnet.rss.BasicFeedConfig;
 import com.orionletizi.avi.dragnet.rss.Dragnet;
+import com.orionletizi.avi.dragnet.rss.DragnetConfig;
 import com.rometools.rome.io.FeedException;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.SimpleWebServer;
@@ -13,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +44,40 @@ public class Service {
   public Service(final int port, final File webroot) throws IOException, FeedException {
     this.log = new File(webroot, "log.txt");
     this.errorLog = new File(webroot, "error-log.txt");
-    this.dragnet = new Dragnet(new File(webroot, "raw.xml"), new File(webroot, "filtered.xml"));
+    final ObjectMapper mapper = new ObjectMapper();
+    mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+    final URL configUrl = ClassLoader.getSystemResource("feed-configs.json");
+    if (configUrl == null) {
+      final IOException e = new IOException("Unable to load feed config.");
+      log(errorLog, e);
+      throw e;
+    }
+
+    final DragnetConfig.FeedConfig[] feeds = mapper.readValue(configUrl, BasicFeedConfig[].class);
+
+    this.dragnet = new Dragnet(new DragnetConfig() {
+      @Override
+      public FeedConfig[] getFeeds() {
+        return feeds;
+      }
+
+      @Override
+      public File getFilteredOutputFile() {
+        return new File(webroot, "filtered.xml");
+      }
+
+      @Override
+      public File getRawOutputFile() {
+        return new File(webroot, "raw.xml");
+      }
+
+      @Override
+      public File getWriteRoot() {
+        return webroot;
+      }
+    });
+
     executor.scheduleAtFixedRate((Runnable) () -> {
       try {
         log("Refreshing dragnet feed...");
