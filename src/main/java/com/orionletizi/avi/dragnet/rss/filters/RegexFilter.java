@@ -24,6 +24,7 @@ public class RegexFilter implements FeedFilter {
       final boolean matches = pattern.matcher(entry.getTitle()).matches();
       info("CHECK TITLE: matches: " + matches + "; pattern: " + pattern + "; title: " + entry.getTitle());
       if (matches) {
+        entry.setTitle(tagValue(entry.getTitle()));
         return entry;
       }
     }
@@ -31,15 +32,22 @@ public class RegexFilter implements FeedFilter {
       final boolean matches = pattern.matcher(entry.getDescription().getValue()).matches();
       info("CHECK DESCRIPTION: matches: " + matches + ", pattern: " + pattern + ", description: " + entry.getDescription().getValue());
       if (matches) {
+        final SyndContent description = entry.getDescription();
+        description.setValue(tagValue(description.getValue()));
         return entry;
       }
     }
     for (SyndContent content : entry.getContents()) {
       if (content.getValue() != null && pattern.matcher(content.getValue()).matches()) {
+        content.setValue(tagValue(content.getValue()));
         return entry;
       }
     }
     return null;
+  }
+
+  private String tagValue(final String value) {
+    return value + " &lt; DRAGNET MATCH: " + pattern + "&gt";
   }
 
   private void info(Object msg) {
