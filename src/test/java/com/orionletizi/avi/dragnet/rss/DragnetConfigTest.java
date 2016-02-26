@@ -3,6 +3,8 @@ package com.orionletizi.avi.dragnet.rss;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
+import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsFilter;
 import org.junit.Test;
 
 import java.net.URL;
@@ -28,21 +30,26 @@ public class DragnetConfigTest {
 
   @Test
   public void testBasics() throws Exception {
+
+    final DragnetFilter dragnetFilter = new DragnetFilter();
+    final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(dragnetFilter);
+
+
     final DragnetConfig.FeedConfig[] feedConfigs = {
-        new BasicFeedConfig(new URL(DZONE), "dzone.xml", true),
-        new BasicFeedConfig(new URL(INFOQ), "infoq.xml", true),
-        new BasicFeedConfig(new URL(OREILLEY_RADAR), "oreilley-radar.xml", true),
-        new BasicFeedConfig(new URL(OREILLEY_FORUMS), "oreilley-forums.xml", true),
-        new BasicFeedConfig(new URL(QUORA), "quora.xml", true),
-        new BasicFeedConfig(new URL(SERVER_FAULT), "server-fault.xml", true),
-        new BasicFeedConfig(new URL(STACK_OVERFLOW), "stack-overflow.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_AWS), "ggroups-aws.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_MESOS), "ggroups-mesos.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), "ggroups-nginx-haproxy.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), "ggroups-openshift.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), "ggroups-openstack.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), "ggroups-cloud-foundry.xml", true),
-        new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), "ggroups-load-balancer.xml", true)
+        new BasicFeedConfig(new URL(DZONE), dragnetFilter, "dzone.xml", true),
+        new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", true),
+        new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", true),
+        new BasicFeedConfig(new URL(OREILLEY_FORUMS), dragnetFilter, "oreilley-forums.xml", true),
+        new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
+        new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", true),
+        new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), googleGroupsFilter, "ggroups-openshift.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), googleGroupsFilter, "ggroups-openstack.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), googleGroupsFilter, "ggroups-cloud-foundry.xml", true),
+        new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), googleGroupsFilter, "ggroups-load-balancer.xml", true)
     };
 
     final ObjectMapper mapper = new ObjectMapper();

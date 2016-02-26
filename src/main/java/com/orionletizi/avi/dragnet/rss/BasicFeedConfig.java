@@ -10,6 +10,9 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
   private URL feedUrl;
 
   @JsonProperty
+  private FeedFilter filter;
+
+  @JsonProperty
   private String name;
 
   @JsonProperty
@@ -20,10 +23,16 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
     // for Jackson
   }
 
-  public BasicFeedConfig(final URL feedURL, final String name, final boolean shouldWrite) {
+  public BasicFeedConfig(final URL feedURL, final FeedFilter filter, final String name, final boolean shouldWrite) {
     this.feedUrl = feedURL;
+    this.filter = filter;
     this.name = name;
     this.shouldWrite = shouldWrite;
+  }
+
+  @Override
+  public FeedFilter getFilter() {
+    return filter;
   }
 
   @Override
@@ -40,4 +49,5 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
   public boolean shouldWrite() {
     return shouldWrite;
   }
+
 }

@@ -1,6 +1,5 @@
 package com.orionletizi.avi.dragnet.rss;
 
-import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.feed.synd.SyndFeedImpl;
@@ -28,7 +27,6 @@ public class Dragnet {
   }
 
   public void read() throws IOException, FeedException {
-    final DragnetFilter dragnet = new DragnetFilter();
     final SyndFeedInput input = new SyndFeedInput();
     final List<SyndEntry> filteredEntries = new ArrayList<>();
     final List<SyndEntry> rawEntries = new ArrayList<>();
@@ -49,7 +47,7 @@ public class Dragnet {
 
       rawEntries.addAll(feed.getEntries());
       for (SyndEntry entry : feed.getEntries()) {
-        final SyndEntry filtered = dragnet.filter(entry);
+        final SyndEntry filtered = feedConfig.getFilter().filter(entry);
         if (filtered != null) {
           filteredEntries.add(filtered);
         }

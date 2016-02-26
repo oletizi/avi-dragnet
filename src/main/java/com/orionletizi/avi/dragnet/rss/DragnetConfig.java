@@ -21,6 +21,8 @@ public interface DragnetConfig {
     String getName();
 
     boolean shouldWrite();
+
+    FeedFilter getFilter();
   }
 
 }
