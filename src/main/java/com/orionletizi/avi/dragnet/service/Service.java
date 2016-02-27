@@ -80,7 +80,7 @@ public class Service {
   }
 
   private static final DateFormat df = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss");
-  private static final long REFRESH_PERIOD_IN_MINUTES = 30;
+  private static final long REFRESH_PERIOD_IN_MINUTES = 120;
 
   private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
   private final Dragnet dragnet;
