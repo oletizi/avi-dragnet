@@ -94,13 +94,6 @@ public class Service {
     this.log = new File(webroot, "log.txt");
     this.errorLog = new File(webroot, "error-log.txt");
 
-    final URL configUrl = ClassLoader.getSystemResource("feed-configs.json");
-    if (configUrl == null) {
-      final IOException e = new IOException("Unable to load feed config.");
-      log(errorLog, e);
-      throw e;
-    }
-
     this.dragnet = new Dragnet(new DragnetConfig() {
       @Override
       public FeedConfig[] getFeeds() {
