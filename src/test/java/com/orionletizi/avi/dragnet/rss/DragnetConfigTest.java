@@ -31,6 +31,12 @@ public class DragnetConfigTest {
   final static String GGROUPS_CLOUD_FOUNDRY = "http://www.bing.com/search?q=site%3Agroups.google.com+(%22cloud+foundry%22+OR+%22cloudfoundry%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancer%22+OR+%22loadbalancing%22+OR+F5)&format=rss";
   final static String GGROUPS_LOAD_BALANCER = "http://www.bing.com/search?q=site%3Agroups.google.com+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22&format=rss";
 
+  /**
+   * The point of this test is both to test the serializability of the config stuff and, also, to generate a JSON
+   * config that can be used as a starting point for the real configuration.
+   *
+   * @throws Exception
+   */
   @Test
   public void testBasics() throws Exception {
 
