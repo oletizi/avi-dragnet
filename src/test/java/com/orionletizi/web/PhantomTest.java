@@ -33,9 +33,9 @@ public class PhantomTest {
   @Test
   public void testHello() throws Exception {
 
-    phantom.execute("console.log('Hello, World!'); phantom.exit();", out, System.err);
+    final Process proc = phantom.execute("console.log('Hello, World!'); phantom.exit();", out, System.err);
+    proc.waitFor();
     out.close();
-
     assertEquals("Hello, World!\n", outString.getBuffer().toString());
   }
 
@@ -45,7 +45,8 @@ public class PhantomTest {
     final String javascript = IOUtils.toString(url.openStream());
 
     final Phantom phantom = new Phantom();
-    phantom.execute(javascript, out, System.err);
+    final Process proc = phantom.execute(javascript, out, System.err);
+    proc.waitFor();
     out.close();
 
     final String expected = "PhantomJS is a headless WebKit scriptable with a JavaScript API.";
