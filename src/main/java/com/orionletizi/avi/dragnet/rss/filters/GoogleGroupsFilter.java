@@ -1,20 +1,23 @@
 package com.orionletizi.avi.dragnet.rss.filters;
 
 import com.orionletizi.avi.dragnet.rss.FeedFilter;
-import com.orionletizi.web.Phantom;
 import com.rometools.rome.feed.synd.SyndEntry;
-import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
+import java.time.Instant;
+import java.time.Period;
+import java.util.Date;
+import java.util.List;
 
 public class GoogleGroupsFilter implements FeedFilter {
 
-  private final Phantom phantom;
   private FeedFilter filter;
+  private Period maxAge;
+  private GoogleGroupsDateScraper scraper;
 
-  public GoogleGroupsFilter(final FeedFilter filter) {
-    phantom = new Phantom();
+  public GoogleGroupsFilter(final GoogleGroupsDateScraper scraper, final FeedFilter filter, final Period maxAge) {
+    this.scraper = scraper;
     this.filter = filter;
+    this.maxAge = maxAge;
   }
 
   @Override
@@ -28,18 +31,24 @@ public class GoogleGroupsFilter implements FeedFilter {
 
   private boolean youngEnough(final SyndEntry entry) {
 
-    try {
-      final String template = IOUtils.toString(ClassLoader.getSystemResource("js/ggroups-date.js").openStream());
-      final String urlToken = "${entry.url}";
-      System.out.println("URL TOKEN: " + urlToken);
-      System.out.println("url    : " + entry.getLink());
-      final String js = template.replace(urlToken, entry.getLink());
-      //System.out.println("Executing: " + js);
-      final int status = phantom.execute(js, System.out, System.err);
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
+    scraper.scrape(entry.getLink());
+    final List<Date> dates = scraper.getDates();
+    System.out.println("Dates: " + dates);
+    if (!dates.isEmpty()) {
+      final Instant youngest = dates.get(dates.size() - 1).toInstant();
+      final Instant now = Instant.now();
+      final Instant minInstant = now.minus(maxAge);
+
+      System.out.println("YOUNGEST DATE FOUND: " + youngest);
+      System.out.println("MIN DATE           : " + minInstant);
+
+      if (youngest.isAfter(minInstant)) {
+        System.out.println("IS YOUNG ENOUGH. RETURNING TRUE.");
+        return true;
+      }
     }
 
-    return true;
+    return false;
   }
+
 }

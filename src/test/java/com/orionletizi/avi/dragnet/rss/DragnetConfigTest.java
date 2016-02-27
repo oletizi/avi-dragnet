@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
+import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsDateScraper;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsFilter;
 import org.junit.Test;
 
 import java.net.URL;
+import java.time.Duration;
+import java.time.Period;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -32,7 +35,9 @@ public class DragnetConfigTest {
   public void testBasics() throws Exception {
 
     final DragnetFilter dragnetFilter = new DragnetFilter();
-    final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(dragnetFilter);
+    final GoogleGroupsDateScraper scraper = new GoogleGroupsDateScraper(Duration.ofMinutes(1));
+    final Period maxAge = Period.ofDays(30);
+    final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(scraper, dragnetFilter, maxAge);
 
 
     final DragnetConfig.FeedConfig[] feedConfigs = {

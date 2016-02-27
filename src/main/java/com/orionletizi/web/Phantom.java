@@ -10,7 +10,7 @@ public class Phantom {
 
   }
 
-  public int execute(final String javascript, final OutputStream out, final OutputStream err) throws IOException, InterruptedException {
+  public Process execute(final String javascript, final OutputStream out, final OutputStream err) throws IOException, InterruptedException {
 
     final File scriptFile = File.createTempFile("phantomjs-script", "js");
     final FileWriter scriptOut = new FileWriter(scriptFile);
@@ -26,18 +26,18 @@ public class Phantom {
     dumpStream(proc.getInputStream(), out);
     dumpStream(proc.getErrorStream(), err);
 
-    return proc.waitFor();
+    return proc;
   }
 
   private void dumpStream(final InputStream in, final OutputStream out) {
     new Thread(() -> {
+      int i = -1;
       try {
-        int i = -1;
         while ((i = in.read()) != -1) {
           out.write(i);
         }
       } catch (IOException e) {
-        e.printStackTrace();
+        // whatever... nevermind
       }
     }).start();
   }

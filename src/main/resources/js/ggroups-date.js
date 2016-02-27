@@ -1,6 +1,8 @@
 "use strict";
 var page = require('webpage').create();
 
+var dates = [];
+
 page.settings.userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36";
 page.settings.loadImages = false;
 page.settings.resourceTimeout = 30 * 1000;
@@ -45,9 +47,9 @@ page.onConsoleMessage = function (msg) {
 
 page.onLoadFinished = function () {
     var outfile = "/tmp/page.png";
-    var waitTime = 10 * 1000;
+    var waitTime = "${lookup.wait}";
 
-    console.log("Waiting for " + waitTime + "ms before rendering.");
+    console.log("Waiting for " + waitTime + " ms before rendering.");
     setTimeout(function () {
         console.log("Rendering page to: " + outfile);
         page.render(outfile);
@@ -60,12 +62,17 @@ page.onLoadFinished = function () {
 page.open("${entry.url}", function (status) {
 });
 
-function digForDates(page, callback) {
+function digForDates(page) {
     page.includeJs("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js", function () {
         page.evaluate(function () {
+            console.log("START DATE DIG");
+            var dateCount = 0;
             $(".IVILX2C-tb-Q").each(function () {
-                console.log("IVILX2C-tb-Q: title: " + $(this).attr("title") + ", text" + $(this).text());
+                dateCount++;
+                console.log("DATE: " + $(this).text());
             });
+            console.log("END DATE DIG");
+            console.log("DATE COUNT: " + dateCount);
         });
     });
 }
