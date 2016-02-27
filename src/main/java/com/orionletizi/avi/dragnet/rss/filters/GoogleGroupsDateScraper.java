@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class GoogleGroupsDateScraper {
-  private static final DateFormat df = new SimpleDateFormat("MM/dd/YY");
+  private static final DateFormat df = new SimpleDateFormat("MM/dd/yy");
   private Duration timeout;
   private final Set<Date> dates = new TreeSet<>();
 
@@ -27,8 +27,7 @@ public class GoogleGroupsDateScraper {
     return new ArrayList<>(dates);
   }
 
-  public void scrape(final String url) {
-    try {
+  public void scrape(final String url) throws IOException, InterruptedException {
 
       String template = IOUtils.toString(ClassLoader.getSystemResource("js/ggroups-date.js").openStream());
 
@@ -36,8 +35,8 @@ public class GoogleGroupsDateScraper {
       final String waitToken = "${lookup.wait}";
       int waitTime = 3 * 1000;
 
-      System.out.println("URL TOKEN: " + urlToken);
-      System.out.println("url    : " + url);
+    info("URL TOKEN: " + urlToken);
+    info("url    : " + url);
 
 
       template = template.replace(urlToken, url);
@@ -58,7 +57,7 @@ public class GoogleGroupsDateScraper {
         String line = null;
         try {
           while ((line = reader.readLine()) != null) {
-            System.out.println("LINE: " + line);
+            info(line);
             if (line.startsWith("DATE:")) {
               // parse the date
               final String dateString = line.substring("DATE: ".length());
@@ -84,7 +83,7 @@ public class GoogleGroupsDateScraper {
                 dates.add(date);
               }
             } else if (line.startsWith("END DATE DIG")) {
-              System.out.println("ALL DONE!!!");
+              info("ALL DONE!!!");
               proc.destroyForcibly();
             }
           }
@@ -96,9 +95,9 @@ public class GoogleGroupsDateScraper {
       if (proc.isAlive()) {
         proc.destroyForcibly();
       }
-    } catch (Exception e) {
-      // oops. sure wish there was an error handling mechanism.
-      e.printStackTrace();
-    }
+  }
+
+  private void info(final String line) {
+    System.out.println(getClass().getSimpleName() + ": " + line);
   }
 }

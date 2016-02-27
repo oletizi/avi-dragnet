@@ -3,6 +3,7 @@ package com.orionletizi.avi.dragnet.rss.filters;
 import com.orionletizi.avi.dragnet.rss.FeedFilter;
 import com.rometools.rome.feed.synd.SyndEntry;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.Period;
 import java.util.Date;
@@ -22,14 +23,19 @@ public class GoogleGroupsFilter implements FeedFilter {
 
   @Override
   public SyndEntry filter(final SyndEntry entry) {
-    if (youngEnough(entry)) {
-      return filter.filter(entry);
-    } else {
-      return null;
+    try {
+      if (youngEnough(entry)) {
+        return filter.filter(entry);
+      } else {
+        return null;
+      }
+    } catch (IOException | InterruptedException e) {
+      // TODO: Add real exception handling
+      throw new RuntimeException(e);
     }
   }
 
-  private boolean youngEnough(final SyndEntry entry) {
+  private boolean youngEnough(final SyndEntry entry) throws IOException, InterruptedException {
 
     scraper.scrape(entry.getLink());
     final List<Date> dates = scraper.getDates();
