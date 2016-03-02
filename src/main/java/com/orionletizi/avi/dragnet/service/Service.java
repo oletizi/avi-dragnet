@@ -7,7 +7,11 @@ import com.orionletizi.avi.dragnet.rss.FeedPersister;
 import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsDateScraper;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsFilter;
+import com.orionletizi.util.logging.LoggerImpl;
+import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.SimpleWebServer;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -28,6 +32,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -87,17 +92,16 @@ public class Service {
   private final File log;
   private final File errorLog;
 
-
   public Service(final int port, final File webroot) throws IOException, FeedException {
     this.log = new File(webroot, "log.txt");
     this.errorLog = new File(webroot, "error-log.txt");
 
     // set up a persisting feed fetcher for each feed
-    final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(feedConfigs.length + 1);
+    final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(feedConfigs.length + 3);
     for (DragnetConfig.FeedConfig feedConfig : feedConfigs) {
       final BasicFeedConfig persisterConfig = new BasicFeedConfig(feedConfig.getFeedUrl(), entry -> entry, feedConfig.getName(), feedConfig.getRefreshPeriodMinutes(), true);
       info("schoduling feed persister for: " + feedConfig.getName());
-      executor.scheduleAtFixedRate((Runnable) () -> {
+      executor.scheduleWithFixedDelay((Runnable) () -> {
         try {
           new FeedPersister(webroot, System::currentTimeMillis, persisterConfig).fetch();
         } catch (IOException e) {
@@ -143,19 +147,15 @@ public class Service {
 
     );
 
-    executor.scheduleAtFixedRate((Runnable) () ->
-
-        {
-          try {
-            log("Refreshing dragnet feed...");
-            dragnet.read();
-            log("Done refreshing dragnet feed.");
-          } catch (Throwable e) {
-            handleError(e);
-          }
-        }
-
-        , 1000 * 60 * 60 * 20, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
+    executor.scheduleWithFixedDelay((Runnable) () -> {
+      try {
+        log("Refreshing dragnet feed...");
+        dragnet.read();
+        log("Done refreshing dragnet feed.");
+      } catch (Throwable e) {
+        handleError(e);
+      }
+    }, 1000 * 60 * 60 * 20, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
 
     this.port = port;
     this.webroots = new ArrayList<>();
@@ -163,10 +163,39 @@ public class Service {
 
     log("Webroot: " + webroot);
 
+    // set up index renderer
+    final IndexRenderer indexRenderer = new IndexRenderer();
+    final SyndFeedInput feedReader = new SyndFeedInput();
+    info("Scheduling the index writier...");
+    executor.scheduleWithFixedDelay((Runnable) () -> {
+      try {
+        info("fetching feeds to write index...");
+        final List<SyndFeed> feeds = new ArrayList<>();
+        for (DragnetConfig.FeedConfig config : feedConfigs) {
+          final File feedFile = new File(webroot, config.getName());
+          if (feedFile.exists()) {
+            info("Fetching feed from file: " + feedFile);
+            final SyndFeed feed = feedReader.build(new XmlReader(feedFile));
+            info("Adding feed to index: " + feed.getTitle());
+            feeds.add(feed);
+          } else {
+            info("Feed file doesn't exist: " + feedFile);
+          }
+        }
+        final File outfile = new File(webroot, "index.html");
+        info("Writing to " + outfile);
+        final FileWriter out = new FileWriter(outfile);
+        indexRenderer.render(feeds, out);
+        out.close();
+      } catch (Exception e) {
+        handleError(e);
+      }
+    }, 0, 10, TimeUnit.SECONDS);
   }
 
   private void info(final String s) {
     log(log, s);
+    //System.out.println(s);
   }
 
   private void handleError(final Throwable e) {
@@ -223,6 +252,7 @@ public class Service {
   }
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
+    LoggerImpl.turnOff(FeedPersister.class);
     File webroot = new File("/tmp");
     if (args.length > 0) {
       webroot = new File(args[0]);
@@ -230,4 +260,5 @@ public class Service {
     final Service service = new Service(8080, webroot);
     service.start();
   }
+
 }
