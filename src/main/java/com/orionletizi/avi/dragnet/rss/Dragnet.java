@@ -16,9 +16,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 public class Dragnet {
-
+  private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   private final DragnetConfig config;
 
@@ -36,19 +37,45 @@ public class Dragnet {
     for (DragnetConfig.FeedConfig feedConfig : config.getFeeds()) {
       info("fetching feed: " + feedConfig.getFeedUrl());
       final URL url = feedConfig.getFeedUrl();
+      final SyndFeed[] feed = {null};
+      // put timeout on feed fetching... sometimes it's really slow
+      final Future task = executor.submit(() -> {
+        try {
+          info("Fetching feed: " + url + "...");
+          feed[0] = input.build(new XmlReader(url));
+          info("Done fetching feed.");
+        } catch (Throwable e) {
+          handleError(e);
+        }
+      });
 
-      final SyndFeed feed = input.build(new XmlReader(url));
+      try {
+        info("Waiting for feed read: " + url + "...");
+        task.get(3, TimeUnit.SECONDS);
+        info("successfully read feed: " + url);
+      } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        handleError(e);
+        // screw this feed. Move on to the next one
+        info("Couldn't read feed in time. Moving to the next feed.");
+        continue;
+      }
+
+      if (feed[0] == null) {
+        continue;
+      }
+
       if (feedConfig.shouldWrite()) {
         // write this source feed to local disk
         final File outfile = new File(config.getWriteRoot(), feedConfig.getName());
         info("Writing to " + outfile);
-        feedWriter.output(feed, outfile);
+        feedWriter.output(feed[0], outfile);
       }
 
-      rawEntries.addAll(feed.getEntries());
-      for (SyndEntry entry : feed.getEntries()) {
+      rawEntries.addAll(feed[0].getEntries());
+      for (SyndEntry entry : feed[0].getEntries()) {
         final SyndEntry filtered = feedConfig.getFilter().filter(entry);
         if (filtered != null) {
+          info("Entry passed filter...");
           filteredEntries.add(filtered);
         }
       }
@@ -75,6 +102,10 @@ public class Dragnet {
     feedWriter.output(rawout, config.getRawOutputFile());
 
     info("Done reading feeds.");
+  }
+
+  private void handleError(final Throwable e) {
+    e.printStackTrace();
   }
 
   private void info(final String s) {

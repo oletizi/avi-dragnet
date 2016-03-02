@@ -84,7 +84,7 @@ public class Service {
   }
 
   private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-  private static final long REFRESH_PERIOD_IN_MINUTES = 120;
+  private static final long REFRESH_PERIOD_IN_MINUTES = 1;
 
   private final Dragnet dragnet;
   private final ArrayList<File> webroots;
@@ -110,7 +110,7 @@ public class Service {
       }, 0, feedConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
     }
 
-    // Set up dragnet to read the persisted feeds
+    // Set up the dragnet to read the persisted feeds
     final DragnetConfig.FeedConfig[] dragnetFeeds = new DragnetConfig.FeedConfig[feedConfigs.length];
     for (int i = 0; i < feedConfigs.length; i++) {
       final DragnetConfig.FeedConfig config = feedConfigs[i];
@@ -119,9 +119,8 @@ public class Service {
           config.getFilter(),
           config.getName(),
           config.getRefreshPeriodMinutes(),
-          config.shouldWrite());
+          false);
     }
-
 
     this.dragnet = new Dragnet(new DragnetConfig() {
       @Override
@@ -147,6 +146,8 @@ public class Service {
 
     );
 
+    // Schedule dragnet
+
     executor.scheduleWithFixedDelay((Runnable) () -> {
       try {
         log("Refreshing dragnet feed...");
@@ -155,7 +156,7 @@ public class Service {
       } catch (Throwable e) {
         handleError(e);
       }
-    }, 1000 * 60 * 60 * 20, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
+    }, 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
 
     this.port = port;
     this.webroots = new ArrayList<>();
