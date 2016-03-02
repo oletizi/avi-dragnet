@@ -95,10 +95,11 @@ public class Service {
     // set up a persisting feed fetcher for each feed
     final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(feedConfigs.length + 1);
     for (DragnetConfig.FeedConfig feedConfig : feedConfigs) {
+      final BasicFeedConfig persisterConfig = new BasicFeedConfig(feedConfig.getFeedUrl(), entry -> entry, feedConfig.getName(), feedConfig.getRefreshPeriodMinutes(), true);
       info("schoduling feed persister for: " + feedConfig.getName());
       executor.scheduleAtFixedRate((Runnable) () -> {
         try {
-          new FeedPersister(webroot, System::currentTimeMillis, feedConfig).fetch();
+          new FeedPersister(webroot, System::currentTimeMillis, persisterConfig).fetch();
         } catch (IOException e) {
           log(errorLog, e);
         }

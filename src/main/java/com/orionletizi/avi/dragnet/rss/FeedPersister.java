@@ -15,6 +15,8 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,8 +60,9 @@ public class FeedPersister {
           filteredEntries.add(filtered);
         }
       }
-      filteredEntries = dedupe.dedupe(filteredEntries);
       info("Feed after fetching latest entries: " + filteredEntries.size());
+      filteredEntries = dedupe.dedupe(filteredEntries);
+      info("Feed after deduplication: " + filteredEntries.size());
       final String extension = FilenameUtils.getExtension(feedName);
       final File archive = new File(workingDir, PERSISTENCE_PATH + "/" + feedName.replace("." + extension, "-" + sequenceGenerator.next() + "." + extension));
       final File publish = new File(workingDir, feedName);
@@ -68,6 +71,10 @@ public class FeedPersister {
       info("Writing feed archive: " + archive);
       feedWriter.output(feed, archive);
       feedWriter.output(feed, publish);
+
+      info("Deleting old archives...");
+      final int deleted = deleteArchivesOlderThan(Instant.now().minus(1, ChronoUnit.DAYS));
+      info("Deleted " + deleted + " archive files");
     } catch (FeedException e) {
       throw new IOException(e);
     }
@@ -88,8 +95,7 @@ public class FeedPersister {
   }
 
   public File getLatestArchive() {
-    final File fl = new File(workingDir, PERSISTENCE_PATH);
-    final File[] files = fl.listFiles(file -> file.isFile() && file.getName().contains(FilenameUtils.getBaseName(feedName)));
+    final File[] files = getFeedArchives();
     long lastMod = Long.MIN_VALUE;
     File choice = null;
     if (files != null) {
@@ -103,7 +109,30 @@ public class FeedPersister {
     return choice;
   }
 
+  public int deleteArchivesOlderThan(final Instant date) {
+    int rv = 0;
+    final File[] archives = getFeedArchives();
+    if (archives != null) {
+      for (File file : archives) {
+        if (file.lastModified() < date.toEpochMilli()) {
+          final boolean deleted = file.delete();
+          if (deleted) {
+            rv++;
+          } else {
+            info("Unable to deleted old archive: " + file);
+          }
+        }
+      }
+    }
+    return rv;
+  }
+
+  private File[] getFeedArchives() {
+    final File fl = new File(workingDir, PERSISTENCE_PATH);
+    return fl.listFiles(file -> file.isFile() && file.getName().contains(FilenameUtils.getBaseName(feedName)));
+  }
+
   private void info(final Object message) {
-    logger.info(message);
+    logger.info("<" + feedName + "> " + message);
   }
 }
