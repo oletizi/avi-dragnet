@@ -27,6 +27,7 @@ public class FeedPersister {
   private final SyndFeedOutput feedWriter;
   private final String feedName;
   private final SyndFeedInput feedReader;
+  private final Dedupe dedupe;
   private File workingDir;
   private SequenceGenerator sequenceGenerator;
 
@@ -41,21 +42,22 @@ public class FeedPersister {
     feedName = config.getName();
     feedReader = new SyndFeedInput();
     feedWriter = new SyndFeedOutput();
+    dedupe = new Dedupe();
   }
 
   public void fetch() throws IOException {
     try {
-      final List<SyndEntry> filteredEntries = new ArrayList<>();
+      List<SyndEntry> filteredEntries = new ArrayList<>();
       filteredEntries.addAll(getArchivedEntries());
       info("starting with " + filteredEntries.size() + " archived entries");
       final SyndFeed feed = feedReader.build(new XmlReader(feedUrl));
       for (SyndEntry entry : feed.getEntries()) {
         final SyndEntry filtered = filter.filter(entry);
         if (filtered != null) {
-          info("adding entry: " + filtered);
           filteredEntries.add(filtered);
         }
       }
+      filteredEntries = dedupe.dedupe(filteredEntries);
       info("Feed after fetching latest entries: " + filteredEntries.size());
       final String extension = FilenameUtils.getExtension(feedName);
       final File archive = new File(workingDir, PERSISTENCE_PATH + "/" + feedName.replace("." + extension, "-" + sequenceGenerator.next() + "." + extension));

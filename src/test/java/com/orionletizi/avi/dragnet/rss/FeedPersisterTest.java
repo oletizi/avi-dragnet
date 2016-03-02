@@ -1,5 +1,6 @@
 package com.orionletizi.avi.dragnet.rss;
 
+import com.orionletizi.util.SequenceGenerator;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -35,6 +36,7 @@ public class FeedPersisterTest {
   private String feedName;
   private File feedSourceFile;
   private File archive;
+  private SequenceGenerator sequenceGenerator;
 
   @Before
   public void before() throws Exception {
@@ -46,7 +48,8 @@ public class FeedPersisterTest {
     sampleFeed2 = ClassLoader.getSystemResource("rss/sample-feed2.xml");
     sequence = 0;
     feedConfig = new BasicFeedConfig(sampleFeed, entry -> entry, feedName, true);
-    persister = new FeedPersister(workingDir, () -> ++sequence, feedConfig);
+    sequenceGenerator = () -> ++sequence;
+    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig);
     feedSourceFile = tmp.newFile();
     FileUtils.copyURLToFile(sampleFeed, feedSourceFile);
     this.archive = new File(workingDir, "archive");
@@ -63,7 +66,6 @@ public class FeedPersisterTest {
     assertFalse(expectedArchive.exists());
     assertFalse(expectedPublished.exists());
     persister.fetch();
-    ls(archive);
     assertTrue("expected archive doesn't exist: " + expectedArchive, expectedArchive.exists());
     assertTrue("expected published feed doesn't exist: " + expectedPublished, expectedPublished.exists());
 
@@ -80,7 +82,6 @@ public class FeedPersisterTest {
     expectedArchive = getExpectedArchiveFile(sequence + 1);
     assertFalse(expectedArchive.exists());
     persister.fetch();
-    ls(archive);
     assertTrue(expectedArchive.exists());
     archivedEntries = getEntries(expectedArchive);
 
@@ -91,8 +92,8 @@ public class FeedPersisterTest {
     feedConfig.setFeedUrl(sampleFeed2);
     expectedArchive = getExpectedArchiveFile(sequence + 1);
     assertFalse(expectedArchive.exists());
+    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig);
     persister.fetch();
-    ls(archive);
     assertTrue(expectedArchive.exists());
     archivedEntries = getEntries(expectedArchive);
     assertEquals("Archived entries isn't the union of the two sample feeds.",
