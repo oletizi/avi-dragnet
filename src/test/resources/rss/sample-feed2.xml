@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+<title>Conversations via Orion Letizi on Inoreader</title>
+<link>http://www.inoreader.com/stream/user/1005620749/tag/Conversations/view/html</link>
+<description><![CDATA[]]></description>
+<language>en-US</language>
+<lastBuildDate>Tue, 01 Mar 2016 19:41:28 +0000</lastBuildDate>
+<pubDate>Tue, 01 Mar 2016 19:41:28 +0000</pubDate>
+<atom:link href="http://www.inoreader.com/stream/user/1005620749/tag/Conversations" rel="self" type="application/rss+xml"></atom:link>
+<generator>Inoreader (https://www.inoreader.com)</generator>
+<item>
+<title>Is the Youtube API the right choice for this application</title>
+<link>http://stackoverflow.com/questions/35731560/is-the-youtube-api-the-right-choice-for-this-application</link>
+<description><![CDATA[<p>I hate to ask overly broad questions here but since Google has put a tight fence around being able to inquire about YouTube directly with them I am turning to SO.  Here is the scenario:</p> 
+ 
+<p>We have approximately 1200 locations in 40 countries that currently upload a 40 minute lecture in an audio format. We would like to support video as well. Our current solution for audio is "home grown".  We control who can upload the lecture in each location and who can access it.  We authenticate the users.  Everything is stored on our server.  We would really like to have a "service" provide the storage and streaming of the videos if we head that direction.</p> 
+ 
+<p>I have skimmed the API documentation and my biggest question is on user authentication and channels. Can I use ONE user account, presumably on the server, to authenticate to YouTube and download and upload ALL videos?  Should I use one channel and one account and upload all the videos (some concurrently) or or do I need one account and 1200 channels?  Or do I need 1200 user accounts and a single channel for each account (which seems unwieldy).</p> 
+ 
+<p>Each location meets once a week.  Several locations could be uploading their videos concurrently.  Access to those videos would be controlled by us and are private to each location.</p> 
+ 
+<p>So this isn't really a coding issue as it is an accounting issue (I guess).  What does Google require when a single organization has multiple locations utilizing the API? Multiple hundreds of locations in this case.</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Pete Helgren</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffb5</guid>
+</item>
+<item>
+<title>RSpec CustomFormatter Not Called</title>
+<link>http://stackoverflow.com/questions/35731556/rspec-customformatter-not-called</link>
+<description><![CDATA[<p>I'm running a rake task that runs a shell command to execute our rspec capybara tests:</p> 
+ 
+<pre><code>`RAILS_ENV=development BROWSER=firefox ENVIRONMENT=beta ACCOUNT_ID=1 TEST_RUN_ID=1 BROWSER_VERSION=43 bundle exec rspec spec/accounts/account_spec.rb --require ./spec/custom_formatter.rb --format CustomFormatter` 
+</code></pre> 
+ 
+<p>That command is based off what <a href="https://www.relishapp.com/rspec/rspec-core/docs/formatters/custom-formatters">relishapp.com</a> recommends: <em>When 
+I run rspec example_spec.rb --require ./custom_formatter.rb --format CustomFormatter</em></p> 
+ 
+<p>My <code>custom_formatter.rb</code> looks like this:</p> 
+ 
+<pre><code>class CustomFormatter 
+  RSpec::Core::Formatters.register self, :dump_summary 
+ 
+  def initialize(output) 
+    @output = output 
+  end 
+ 
+  # Overwritting this method to post results to dashboard instead of terminal 
+  def dump_summary(summary) 
+    test_run = TestRun.find(ENV['TEST_RUN_ID']) 
+    pending_examples = summary.pending_examples.count 
+    total_count = summary.examples.count - pending_examples 
+    failed_count = summary.failed_examples.count 
+    passed_count = total_count - failed_count 
+    test_run.test_data = {failed: []} 
+    failed = test_run.test_data[:failed] 
+    summary.failed_examples.each do |f| 
+      description = f.full_description 
+      exception = f.exception.message 
+      location = f.metadata[:location] 
+      failed &lt;&lt; {description: description, exception: exception, location: location} 
+    end 
+    test_run.update_attributes!(completed_at: DateTime.now, total_specs: total_count, passed: passed_count, failed: failed_count) 
+    test_run.save 
+    test_run.submit_to_dashboard 
+  end 
+end 
+</code></pre> 
+ 
+<p>The problem is that my custom formatter isn't being called. I've put debuggers in it, print lines, changed the output and nothing has changed. </p> 
+ 
+<p>What do I need to do to get the custom formatter called?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>j will</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffb3</guid>
+</item>
+<item>
+<title>Every YouTube video has two links</title>
+<link>http://stackoverflow.com/questions/35731554/every-youtube-video-has-two-links</link>
+<description><![CDATA[<p>I've tried playing with YouTube video URL's and found that two every video has two links for example</p> 
+ 
+<p>Suppose a video has  the following link </p> 
+ 
+<p><a href="https://www.youtube.com/watch?v=YykjpeuMNEk">https://www.youtube.com/watch?v=YykjpeuMNEk</a></p> 
+ 
+<p>Now I change the last letter of the link to make it </p> 
+ 
+<p><a href="https://www.youtube.com/watch?v=YykjpeuMNEl">https://www.youtube.com/watch?v=YykjpeuMNEl</a></p> 
+ 
+<p>Try out both the links would open one video.</p> 
+ 
+<p>The logic is change the last letter with the consecutive letter, the letters are case sensitive.</p> 
+ 
+<p>So if the last letter is 'a' change it to 'b', if 'A' change it to 'B', if '1' change it to '2'.</p> 
+ 
+<p>Can someone explain me what is happening in this case?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>user3077946</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffb0</guid>
+</item>
+<item>
+<title>Signalr redis backplane updates not pushed to the clients</title>
+<link>http://stackoverflow.com/questions/35731549/signalr-redis-backplane-updates-not-pushed-to-the-clients</link>
+<description><![CDATA[<p>We have configured the redis backplane in owin startup code of the web app. The web app runs a background job on a timer, that wakes up and notifies the client if an important event took place. After querying the backend, the background job eventually makes this call:</p> 
+ 
+<pre><code>hubContext.Client.All.nofify(message); 
+</code></pre> 
+ 
+<p>This works fine without the backplane, but doesn't with the backplane configured. I have verified in the debugger that the call is being made, but it doesn't make it down to the client.</p> 
+ 
+<p>Also, if we call signalr hub from the client (outside of the web app) either through js or signalr.client clients, the backplane works as advertised.</p> 
+ 
+<p>Is there something missing in the scenario where we're calling directly to hub context from within the web app itself without initiating the call from the client first?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Tom</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffae</guid>
+</item>
+<item>
+<title>ASP.NET on Docker Not Serving Web App to Browser</title>
+<link>http://stackoverflow.com/questions/35731548/asp-net-on-docker-not-serving-web-app-to-browser</link>
+<description><![CDATA[<p>I can't get my ASP.NET web application to get served to my browser when the web app is containerized in Docker.</p> 
+ 
+<p>I'm running a Mac, and I've used Visual Studio Code to create an ASP.NET web application. It's a simple, out-of-the-box demo that is based on the <code>yo aspnet</code> "Empty Application." When run "native" (outside of Docker), this application serves a "Hello World!" to <a href="http://localhost:5000">http://localhost:5000</a> just fine. In other words, running <code>dnx web</code> starts the web server (Kestrel) and yeilds:</p> 
+ 
+<pre><code>Hosting environment: Production  
+Now listening on: http://localhost:5000 
+Application started. Press Ctrl+C to shut down. 
+</code></pre> 
+ 
+<p>This is good. Now enter Docker. I seem to have successfully built a Docker image containing the web application, and when I run the container in Docker, I get the same output from Kestrel. Also good, but, I can no longer load the "Hello World!" page in my browser at <a href="http://localhost:5000">http://localhost:5000</a>. Instead, I get a <code>ERR_CONNECTION_REFUSED</code>. This is fairly obviously because due to the Docker "indirection," there is nothing serving directly to port 5000 anymore. In other words, I think there's an incorrect forwarding configuration, or, I think am misunderstanding the addressing.</p> 
+ 
+<p>I believe that port forwarding is involved in this process. In my Dockerfile, I am using an <code>EXPOSE 5000</code> which I thought would allow me to map my local use of port 5000 to the Docker container's port 5000 using a run command like this:</p> 
+ 
+<pre><code>docker run -i -t -p 5000:5000 container_name 
+</code></pre> 
+ 
+<p>But that's not the case with <a href="http://localhost:5000">http://localhost:5000</a> (<code>ERR_CONNECTION_REFUSED</code>). So it occurred to me that Docker is almost certainly not at <code>localhost</code>. I had noticed when Docker loads, it says:</p> 
+ 
+<pre><code>docker is configured to use the default machine with IP 192.168.99.100 
+</code></pre> 
+ 
+<p>So, I thought I'd try <a href="http://192.168.99.100:5000">http://192.168.99.100:5000</a>, but again (confusingly?) <code>ERR_CONNECTION_REFUSED</code>. Next, I read an interesting article <a href="http://stackoverflow.com/questions/19897743/exposing-a-port-on-a-live-docker-container">here</a> and I was able to determine from the suggested command </p> 
+ 
+<pre><code>docker inspect container_name | grep IPAddress 
+</code></pre> 
+ 
+<p>That the container is assigned <code>"IPAddress": "172.17.0.2"</code></p> 
+ 
+<p>So, I thought I'd try <a href="http://172.17.0.2:5000">http://172.17.0.2:5000</a>. And now we might actually be getting somewhere, because instead of a <code>ERR_CONNECTION_REFUSED</code>, I instead get a spinning hourglass and a resulting timeout. But still no "Hello World!"</p> 
+ 
+<p>What might I be missing?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>psi4ce</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffaa</guid>
+</item>
+<item>
+<title>How to extract and display each of the four bytes of an integer individually as 8-bit values</title>
+<link>http://stackoverflow.com/questions/35731543/how-to-extract-and-display-each-of-the-four-bytes-of-an-integer-individually-as</link>
+<description><![CDATA[<p>I have a terrible programming teacher that introduces concepts without explaining them or providing material to understand them, and he's to arrogant and confrontational too seek help from. </p> 
+ 
+<p>So naturally, I'm stuck on yet another question without any guidance. </p> 
+ 
+<blockquote> 
+  <p>Given an integer variable x, write Java code to extract and display each of the four bytes of that integer individually as 8-bit values.</p> 
+</blockquote> 
+ 
+<p>I'm supposed to use masking and bit shift operations to answer this question. I understand that masking means turning bits "on or off" and I understand that an integer has 32 bits or 4 bytes. But that information doesn't help me answer the question. I'm not necessarily asking for the entire solution, but any help would be appreciated. </p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>the_prole</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffa6</guid>
+</item>
+<item>
+<title>Read only list of lists c#</title>
+<link>http://stackoverflow.com/questions/35731513/read-only-list-of-lists-c-sharp</link>
+<description><![CDATA[<p>In general terms, a program I'm making involves storing a small number of entries (probably less than 30 at any given time) which can be categorized. I want to allow these entries to be seen but not altered from outside the class using them. I made a class called Entry which could be modified and another called ReadOnlyEntry which is a wrapper for an Entry object. The easiest way to organize these Entry objects it seems is to create a <code>List&lt;List&lt;Entry&gt;&gt;</code>, where each <code>List&lt;Entry&gt;</code> is a category. But then exposing that data in a readonly way became messy and complicated. I realized I would have to have one object of each of the following types:</p> 
+ 
+<pre><code>List&lt;List&lt;Entry&gt;&gt; data; 
+List&lt;List&lt;ReadOnlyEntry&gt;&gt;  //  Where each ReadOnlyEntry is a wrapper for the Entry in the same list and at the same index as its Entry object. 
+List&lt;IReadOnlyCollection&lt;ReadOnlyEntry&gt;&gt;  //  Where each IReadOnlyCollection is a wrapper for the List&lt;ReadOnlyEntry&gt; at the same index in data. 
+IReadOnlyCollection&lt;IReadOnlyCollection&lt;ReadOnlyList&gt;&gt;  //  Which is a wrapper for the first item I listed. 
+</code></pre> 
+ 
+<p>The last item in the list would be exposed as public. The first lets me change entries, the second lets me add or delete entries, and the third lets me add or delete categories. I would have to keep these wrappers accurate whenever the data changes. This seems convoluted to me, so I'm wondering if there's a blatantly better way to handle this.</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>portalguy15837</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffa4</guid>
+</item>
+<item>
+<title>How to override the default primary key column in ruby on rails 4.0.+?</title>
+<link>http://stackoverflow.com/questions/35731467/how-to-override-the-default-primary-key-column-in-ruby-on-rails-4-0</link>
+<description><![CDATA[<p>I have an already existing database schema with tables that have a string column as primary key and also some tables with more than one columns as key. I would like to map this schema in rails, but I dont know how to override the default primary key (a column id created by the rails framework). </p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>software knife</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffa2</guid>
+</item>
+<item>
+<title>AngularJs ForEach Loop only Shows last Object when pushed into new Object</title>
+<link>http://stackoverflow.com/questions/35731446/angularjs-foreach-loop-only-shows-last-object-when-pushed-into-new-object</link>
+<description><![CDATA[<p>So I am new to AngularJs and when I am using the ForEach to loop through it iterates through all of the objects but only writes the last one to the new object of log{}.</p> 
+ 
+<p><strong>js</strong></p> 
+ 
+<pre><code> $http.get('data.json') 
+ 
+        .success(function (info) { 
+        var log = {}; 
+                log.id= info.id; 
+                log.profile = {}; 
+ 
+                angular.forEach(info.profile, function (value, key) { 
+ 
+ 
+ 
+                    console.log(key,value) 
+ 
+                    log.profile.inter= value.inter 
+ 
+ 
+ 
+ 
+ 
+            }, log); 
+                console.log(JSON.stringify(log)); 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>user2402107</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafffa0</guid>
+</item>
+<item>
+<title>Python Immutable Tuple - What Am I Doing Wrong?</title>
+<link>http://stackoverflow.com/questions/35731442/python-immutable-tuple-what-am-i-doing-wrong</link>
+<description><![CDATA[<p>Apologies if this is obvious but I'm pretty new to Python and I cannot get my head around this problem. In the following code I have populated a tuple with a series of lists and I am trying to create a new list with items from this tuple. I was hoping that the final result will be that test_raw remains unchanged and test_working will look like the following:</p> 
+ 
+<pre><code>[['aa', 1, 2, 99.5, ['bb', 1, 2, 27.2]], 
+ ['aa', 5, 5, 74.2, ['bb', 5, 5, 37]]] 
+</code></pre> 
+ 
+<p>However, in the process, I seem to be appending the 'bb' lists to my tuple as well. I thought that once a tuple is constructed, it cannot be changed but obviously not. Any idea what is happening?</p> 
+ 
+<pre><code>test_raw = (['aa',1,2,99.5], 
+            ['bb',1,2,27.2], 
+            ['aa',5,5,74.2], 
+            ['bb',5,5,37]) 
+test_working = [] 
+ 
+for i in range(len(test_raw)): 
+   if test_raw[i][0] == "aa": 
+       test_working.append(test_raw[i]) 
+for i in range(len(test_raw)): 
+   if test_raw[i][0] == "bb": 
+       for j in range(len(test_working)): 
+           if test_working[j][1:3] == test_raw[i][1:3]: 
+               test_working[j].append(test_raw[i]) 
+               break 
+print(test_raw) 
+(['aa', 1, 2, 99.5, ['bb', 1, 2, 27.2]], ['bb', 1, 2, 27.2], ['aa',.....) 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>JC_RMB</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff9e</guid>
+</item>
+<item>
+<title>while i was compiling this procedure it is giving errors can anybody please give me answer</title>
+<link>http://stackoverflow.com/questions/35731254/while-i-was-compiling-this-procedure-it-is-giving-errors-can-anybody-please-give</link>
+<description><![CDATA[<pre><code>--program to generate patient detail report 
+CREATE OR REPLACE PROCEDURE xx_team18_proc2 (admit_date IN DATE, 
+                                             bill_amt IN NUMBER, 
+                                             action IN VARCHAR2) IS 
+   CURSOR c IS 
+      SELECT p.patient_name, 
+             ph.symptom_issue symptom, 
+             ph.consulted_dr doctor, 
+             ph.diagnosis, 
+             ph.bill_amount 
+      FROM   xx_patient_master_team18 p, xx_patient_history_team18 ph 
+      WHERE      CASE action 
+                    WHEN '&gt;' THEN (bill_amount &gt; bill_amt) 
+                    WHEN '&lt;' THEN (bill_amount &lt; bill_amt) 
+                    ELSE (bill_amount = bill_amount) 
+                 END 
+             AND p.patient_id = ph.patient_id; 
+ 
+   rec c%ROWTYPE; 
+BEGIN 
+   IF NOT c%ISOPEN THEN 
+      OPEN c; 
+   END IF; 
+ 
+   DBMS_OUTPUT.put_line ('  records belongs to ' || bill_amt); 
+ 
+   FETCH c INTO rec; 
+ 
+   LOOP 
+      EXIT WHEN c%NOTFOUND; 
+      DBMS_OUTPUT.put_line ( 
+            rec.symptom 
+         || ' ' 
+         || rec.doctor 
+         || ' ' 
+         || rec.diagnosis 
+         || ' ' 
+         || rec.bill_amount); 
+   END LOOP; 
+END xx_team18_proc2; 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Thiru</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff9a</guid>
+</item>
+<item>
+<title>C# connecting to live video stream</title>
+<link>http://stackoverflow.com/questions/35731251/c-sharp-connecting-to-live-video-stream</link>
+<description><![CDATA[<p>so for the past few days i'm trying to connect to video stream which is on <a href="http://ipaddress/video">http://ipaddress:port/video</a> with C#. I tried EmguCv and Aforge frameworks, but neither of them have an ability to connect directly to URL. I also tried HttpRequest, but the byte flow is too big. Is it possible to connect somehow?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Rimwis</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff99</guid>
+</item>
+<item>
+<title>How to &quot;highlight&quot; a word found in a text file?</title>
+<link>http://stackoverflow.com/questions/35731194/how-to-highlight-a-word-found-in-a-text-file</link>
+<description><![CDATA[<p>I am searching a text file for a word. It finds the word and returns the line that has the word. This is good, but I would like to highlight or make the word bold in that line.</p> 
+ 
+<p>Can I do this in Python? Also I could use a better way to get the users txt file path.  </p> 
+ 
+<pre><code>def read_file(file): 
+    #reads in the file and print the lines that have searched word.  
+    file_name = raw_input("Enter the .txt file path: ") 
+    with open(file_name) as f: 
+        the_word = raw_input("Enter the word you are searching for: ") 
+        print "" 
+        for line in f: 
+            if the_word in line: 
+                print line  
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>jeffkrop</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff97</guid>
+</item>
+<item>
+<title>Editing some tags when using XSLTcopy</title>
+<link>http://stackoverflow.com/questions/35731188/editing-some-tags-when-using-xsltcopy</link>
+<description><![CDATA[<p>Assume the following example XML :</p> 
+ 
+<pre><code>  &lt;tag&gt; 
+    &lt;subtag1&gt;value1&lt;/subtag1&gt; 
+    &lt;subtag2&gt;value2&lt;/subtag2&gt; 
+    &lt;subtag3&gt;value3&lt;/subtag3&gt; 
+    &lt;subtag4&gt;value4&lt;/subtag4&gt; 
+    &lt;subtag5&gt;value5&lt;/subtg5&gt; 
+  &lt;/tag&gt; 
+</code></pre> 
+ 
+<p>and I would like to get all the tag section, but make some changes, like:</p> 
+ 
+<pre><code>  &lt;tag&gt; 
+    &lt;subtag1&gt;value1&lt;/subtag1&gt; 
+    &lt;subtag2&gt;value2&lt;/subtag2&gt; 
+    &lt;subtag3&gt;value3&lt;/subtag3&gt; 
+    &lt;new-subtag4&gt;value4&lt;/new-subtag4&gt; 
+    &lt;new-subtag5 type="new"&gt;value5&lt;/new-subtg5&gt; 
+  &lt;/tag&gt; 
+</code></pre> 
+ 
+<p>I tried the following script, but the result is not correct.</p> 
+ 
+<pre><code>&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt; 
+ &lt;xsl:output omit-xml-declaration="no" indent="yes"/&gt; 
+ &lt;xsl:strip-space elements="*"/&gt; 
+ 
+ 
+ &lt;xsl:template match="@*|node()"&gt; 
+  &lt;xsl:copy&gt; 
+    &lt;xsl:apply-templates select="@*|node()"/&gt; 
+  &lt;/xsl:copy&gt; 
+ &lt;/xsl:template&gt; 
+ 
+ &lt;xsl:template match="parent::subtag4"&gt; 
+  &lt;xsl:element name="new-subtag4"&gt; 
+   &lt;xsl:apply-templates select="@*|node()"/&gt; 
+  &lt;/xsl:element&gt; 
+ &lt;/xsl:template&gt; 
+ 
+ &lt;xsl:template match="parent::subtag5"&gt; 
+  &lt;xsl:element name="new-subtag5" type="n"&gt; 
+   &lt;xsl:apply-templates select="@*|node()"/&gt; 
+  &lt;/xsl:element&gt;  
+ &lt;/xsl:template&gt; 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>java developer</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff95</guid>
+</item>
+<item>
+<title>Find sum of numbers in line</title>
+<link>http://stackoverflow.com/questions/35731091/find-sum-of-numbers-in-line</link>
+<description><![CDATA[<p>This is what I have to do:</p> 
+ 
+<ol><li><p>Read content of a text file, where two numbers separated by comma are on each line (like <code>10, 5\n</code>, <code>12, 8\n</code>, …)</p></li> 
+<li><p>Make a sum of those two numbers</p></li> 
+<li><p>Write into new text file two original numbers and the result of summation = like <code>10 + 5 = 15\n</code>, <code>12 + 8 = 20\n</code>, …</p></li> 
+</ol><p>So far, I've got this:</p> 
+ 
+<pre><code>import os 
+import sys 
+ 
+relative_path = "Homework 2.txt" 
+if not os.path.exists(relative_path): 
+    print "not found" 
+    sys.exit() 
+ 
+read_file = open(relative_path, "r") 
+lines = read_file.readlines() 
+read_file.close() 
+print lines 
+ 
+path_output = "data_result4.txt" 
+write_file = open(path_output, "w") 
+ 
+for line in lines: 
+    line_array = line.split() 
+    print line_array 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Alicia Rijo</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff93</guid>
+</item>
+<item>
+<title>C++ Program to print the longest word of the string?</title>
+<link>http://stackoverflow.com/questions/35731079/c-program-to-print-the-longest-word-of-the-string</link>
+<description><![CDATA[<pre><code>    #include &lt;iostream&gt; 
+#include &lt;string&gt; 
+ 
+using namespace std; 
+ 
+int main() 
+{ 
+string s; 
+getline(cin , s) ; #input of string from user 
+int counter = 0; 
+int max_word = -1; 
+int len = s.length(); #length of string 
+string max = " "; 
+string counter_word = " "; 
+ 
+for (int i = 0; i &lt; len; i++) 
+{ 
+    if(s[i] != ' ') 
+        { 
+        counter++; 
+        } 
+ 
+    if(s[i] == ' ' || i == len - 1) 
+    { 
+        if(counter &gt; max_word) 
+            { 
+            max_word = counter; 
+                        //handling end of string. 
+            if(i == len - 1) 
+                            max = s.substr(i + 1 - max_word, max_word); #sub string command that prints the longest word 
+                        else 
+                max = s.substr(i - max_word, max_word); 
+                } 
+ 
+    counter = 0; 
+    } 
+} 
+cout &lt;&lt; max_word &lt;&lt; " " &lt;&lt; max &lt;&lt; endl; #output 
+return 0; 
+} 
+</code></pre> 
+ 
+<p>The current output is '4 This' on entering the string "This is cool".  
+How do I get it to print '4 This; Cool' ? 
+On running it in Linux through the terminal, it gives me the error 
+"  terminate called after throwing an instance of 'std::out_of_range' what(): basic_string::substr Aborted (core dumped)  "</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Kana_chan</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff91</guid>
+</item>
+<item>
+<title>Passing `nil` to method using default named parameters</title>
+<link>http://stackoverflow.com/questions/35731009/passing-nil-to-method-using-default-named-parameters</link>
+<description><![CDATA[<p>On a Rails project, I am gathering a hash with 10-15 key-value pairs, and passing it to a class (service object) for instantiation. The object properties should be set from the values in the hash except when there is no value (or <code>nil</code>). In this case, the property would desirably get set to a default value.</p> 
+ 
+<p>Instead of checking whether every value in the hash is not <code>nil</code> before creating an object, I would like to find a more efficient way of doing this.</p> 
+ 
+<p>I'm trying to use named parameters with default values. I don't know if this makes sense, but I would like to use the default value when the parameter is called with <code>nil</code>. I created a test for this functionality:</p> 
+ 
+<pre><code>class Taco 
+  def initialize(meat: "steak", cheese: true, salsa: "spicy") 
+    @meat = meat 
+    @cheese = cheese 
+    @salsa = salsa 
+  end 
+  def assemble 
+    "taco with: #@meat + #@cheese + #@salsa" 
+  end 
+end 
+ 
+options1 = {:meat =&gt; "chicken", :cheese =&gt; false, :salsa =&gt; "mild"} 
+chickenTaco = Taco.new(options1) 
+puts chickenTaco.assemble 
+# =&gt; taco with: chicken + false + mild 
+ 
+options2 = {} 
+defaultTaco = Taco.new(options2) 
+puts defaultTaco.assemble 
+# =&gt; taco with: steak + true + spicy 
+ 
+options3 = {:meat =&gt; "pork", :cheese =&gt; nil, :salsa =&gt; nil} 
+invalidTaco = Taco.new(options3) 
+puts invalidTaco.assemble 
+# expected =&gt; taco with: pork + true + spicy 
+# actual =&gt; taco with: pork +  + 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Peter Lopez</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff8f</guid>
+</item>
+<item>
+<title>Encode TIFF image using H.265 (HEVC) codec</title>
+<link>http://stackoverflow.com/questions/35730804/encode-tiff-image-using-h-265-hevc-codec</link>
+<description><![CDATA[<p>Is it possible to encode image within TIFF file using HEVC codec?</p> 
+ 
+<p>Command:</p> 
+ 
+<blockquote> 
+  <p>./TAppEncoderStatic -i cubeImag.tif -wdt 1296 -hgt 1296 -cf 400 -fr 1 -f 1 -c ../cfg/encoder_intra_main_rext.cfg </p> 
+</blockquote> 
+ 
+<p>But I am unable to do it. Any ideas?</p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>Pedro Fernandes</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff8b</guid>
+</item>
+<item>
+<title>How cab I get MAC address of a selected device in pcap.net</title>
+<link>http://stackoverflow.com/questions/35730723/how-cab-i-get-mac-address-of-a-selected-device-in-pcap-net</link>
+<description><![CDATA[<p>How can I get MAC address of a selected LivePacketDevice in pcap.net?</p> 
+ 
+<pre><code>var allDevices = LivePacketDevice.AllLocalMachine; 
+LivePacketDevice dev = allDevices[0]; 
+</code></pre>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>StarWind</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff89</guid>
+</item>
+<item>
+<title>how to select option using id with value to another select option value dynamic</title>
+<link>http://stackoverflow.com/questions/35730710/how-to-select-option-using-id-with-value-to-another-select-option-value-dynamic</link>
+<description><![CDATA[<p></p><div> 
+<div> 
+<pre><code>&lt;script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'&gt;&lt;/script&gt; 
+&lt;script type="text/javascript"&gt; 
+    var selector;   
+  $(document).ready(function() { 
+      $('#DropDownList1').change(function() { 
+ 
+    // Hide all drop downs sharing the CSS class "toggledDropDown". 
+    $('.toggledDropDown').hide(); 
+ 
+    // Build a selector for the selected drop down 
+    selector = ('#' + $(this).val()); 
+ 
+    // Show the selected drop down 
+    $(selector).show(); 
+ 
+ }); 
+ 
+}); 
+ 
+  $(document).ready(function() { 
+    $(selector).change(function() { 
+     //var Link = $(selector).val(); 
+   //$('#Submit').click(function() { 
+      //window.open(Link,'_blank'); 
+     // alert(selector); 
+   var Link = (selector + $(this).val()); 
+ 
+   window.open(Link,'_blank'); 
+     
+      alert(Link); 
+}); 
+}); 
+ 
+ 
+&lt;/script&gt;</code></pre> 
+<pre><code>.toggledDropDown 
+{ 
+    display: none; /* Hiding the optional drop down lists */ 
+}</code></pre> 
+<pre><code>&lt;div class="hrweb_box"&gt; 
+&lt;ul&gt; 
+&lt;li&gt;&lt;select id="DropDownList1" class="ctype"&gt; 
+  &lt;option value=""&gt; SELECT &lt;/option&gt; 
+  &lt;option value="1"&gt; VISTO DE VISITANTE &lt;/option&gt; 
+  &lt;option value="2"&gt;INTERCAMBIO &amp; TRAINEE &lt;/option&gt; 
+  &lt;option value="3"&gt;VISTO DE ESTUDANTE &lt;/option&gt; 
+  &lt;option value="4"&gt;GREEN CARD&lt;/option&gt; 
+  &lt;option value="5"&gt;VISTO DE TRABALHO&lt;/option&gt; 
+  &lt;option value="6"&gt;VISTO DE INVESTIMENTO&lt;/option&gt; 
+&lt;/select&gt;&lt;/li&gt; 
+ 
+&lt;FORM name="f1"&gt;  
+&lt;li&gt; 
+&lt;select id="1" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/vistos-eua/"&gt; VISTO B1 NEGOCIO &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-de-visitante-b2/"&gt;VISTO B2 TURISMO &lt;/option&gt; 
+&lt;/select&gt;&lt;/li&gt; 
+ 
+&lt;li&gt;&lt;select id="2" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/1338-2/"&gt; AU PAIR   &lt;/option&gt; 
+  &lt;option value="http://panavent.com/trainee/"&gt;TRAINEE&lt;/option&gt; 
+  &lt;option value="http://panavent.com/intern-nos-eua/"&gt; NTERN    &lt;/option&gt; 
+  &lt;option value="http://panavent.com/camp-counselor/"&gt;CAMP COUNSELOR &lt;/option&gt; 
+  &lt;option value="http://panavent.com/summer-camp-usa/"&gt; SUMMER CAMP    &lt;/option&gt; 
+  &lt;option value="http://panavent.com/trabalho-de-verao/"&gt;SUMMER WORK&lt;/option&gt; 
+&lt;/select&gt;&lt;/li&gt; 
+ 
+&lt;li&gt;&lt;select id="3" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/visto-do-estudantes/"&gt; F-1 PARA CURSOS COMPLETOS    &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-m1/"&gt;M-1 PARA PROGRAMAS TECNICAS &lt;/option&gt; 
+  &lt;option value="http://panavent.com/estudante-segundario-eua/"&gt; J-1 PARA ESTUDANTE SECUNDARIO     &lt;/option&gt; 
+  &lt;option value="http://panavent.com/estudantes-em-colegios-e-universidades/"&gt;J-1 PARA ESTUDANTE EM UNIVERSIDADES  &lt;/option&gt;  
+&lt;/select&gt;​&lt;/li&gt; 
+ 
+ 
+&lt;li&gt;&lt;select id="4" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/visto-eb-1/"&gt; EB-1 GREEN CARD   &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-eb-2/"&gt;EB-2 GREEN CARD &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-eb-3/"&gt; EB-3 GREEN CARD    &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-eb-4/"&gt;EB-3 GREEN CARD  &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-eb-5/"&gt; EB-5GREEN CARD    &lt;/option&gt; 
+&lt;/select&gt;​&lt;/li&gt; 
+ 
+&lt;li&gt;&lt;select id="5" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/391-2/"&gt; H1B TRABALHO QUALIFICADO     &lt;/option&gt; 
+  &lt;option value="http://panavent.com/1324-2/"&gt;H2A TRABALHO EM AGRICULTURA &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-h2b/"&gt; H2B  TRABALHO TEMPORARIO     &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-l-1-trabalho/"&gt;L1A TRANSFERENCIA INTRA COMPANY   &lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-l-1b/"&gt; L1B TRANSFERENCIA INTRA COMPANY    &lt;/option&gt; 
+  &lt;option value="http://panavent.com/trabalho-de-verao/"&gt; SUMMER WORK &lt;/option&gt; 
+   
+&lt;/select&gt;​&lt;/li&gt; 
+ 
+&lt;li&gt;&lt;select id="6" name="menu4" class="toggledDropDown ctype"&gt; 
+    &lt;option value="http://panavent.com/visto-e2-investor/"&gt; VISTO E-2 TRATADO&lt;/option&gt; 
+  &lt;option value="http://panavent.com/visto-eb-5/"&gt;VISTO EB-5 INVESTIMENTO&lt;/option&gt; 
+&lt;/select&gt;&lt;/li&gt;​ 
+&lt;li&gt;&lt;input id="Submit" type="button" name="Submit" value="Go!"&gt; 
+&lt;/ul&gt; 
+&lt;/div&gt;</code></pre> 
+</div> 
+</div> 
+ 
+ 
+<p>when you want to a option like  <strong>green card</strong>  then a another select option opend there are four choice then you select your choice and click to go (submit button) then i will goes according to link. 
+-- working--- 
+1)  when you select first option like above like green card this is working </p> 
+ 
+<p>2) i am confuse how to select option like green card -&gt; after  there are four link anyone select then click button and location goes to according to link</p> 
+ 
+<p>please help  how to do this  i have no idea  .</p> 
+ 
+<p>thnaks </p>]]></description>
+<pubDate>Tue, 01 Mar 2016 19:24:22 +0000</pubDate>
+<category>Conversations</category>
+<dc:creator>veer singh</dc:creator>
+<source url="http://stackoverflow.com/questions">Recent Questions - Stack Overflow</source>
+<guid isPermaLink="false">http://www.inoreader.com/article/3a9c6e7c7eafff87</guid>
+</item>
+</channel>
+</rss>

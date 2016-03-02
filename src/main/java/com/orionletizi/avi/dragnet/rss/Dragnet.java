@@ -145,7 +145,7 @@ public class Dragnet {
       }
 
       throw new RuntimeException("Implement Me!");
-//      new Dragnet(Arrays.asList(urls), rawOutput, filteredOutput).read();
+//      new Dragnet(Arrays.asList(urls), rawOutput, filteredOutput).fetch();
 
 
     } catch (ParseException e) {

@@ -50,4 +50,7 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
     return shouldWrite;
   }
 
+  public void setFeedUrl(final URL feedUrl) {
+    this.feedUrl = feedUrl;
+  }
 }
