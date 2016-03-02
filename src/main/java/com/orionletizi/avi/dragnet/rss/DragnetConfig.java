@@ -23,6 +23,8 @@ public interface DragnetConfig {
     boolean shouldWrite();
 
     FeedFilter getFilter();
+
+    long getRefreshPeriodMinutes();
   }
 
 }

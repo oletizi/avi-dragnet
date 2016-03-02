@@ -3,6 +3,7 @@ package com.orionletizi.avi.dragnet.service;
 import com.orionletizi.avi.dragnet.rss.BasicFeedConfig;
 import com.orionletizi.avi.dragnet.rss.Dragnet;
 import com.orionletizi.avi.dragnet.rss.DragnetConfig;
+import com.orionletizi.avi.dragnet.rss.FeedPersister;
 import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsDateScraper;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsFilter;
@@ -27,7 +28,6 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +37,7 @@ public class Service {
   final static String INFOQ = "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj";
   final static String OREILLEY_RADAR = "http://feeds.feedburner.com/oreilly/radar/atom";
   final static String OREILLEY_FORUMS = "http://forums.oreilly.com/rss/forums/10-oreilly-forums/";
-  final static String QUORA = "https://www.quora.com/rss";
+  //final static String QUORA = "https://www.quora.com/rss";
   final static String SERVER_FAULT = "http://serverfault.com/feeds";
   final static String STACK_OVERFLOW = "http://stackoverflow.com/feeds/";
 
@@ -51,28 +51,27 @@ public class Service {
 
   private static DragnetConfig.FeedConfig[] feedConfigs;
   private static DragnetFilter dragnetFilter = new DragnetFilter();
-  private static GoogleGroupsFilter googleGroupsFilter;
 
   static {
     try {
       final GoogleGroupsDateScraper scraper = new GoogleGroupsDateScraper(Duration.ofMinutes(1));
       final Period maxAge = Period.ofDays(30);
-      googleGroupsFilter = new GoogleGroupsFilter(scraper, dragnetFilter, maxAge);
+      final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(scraper, dragnetFilter, maxAge);
       feedConfigs = new DragnetConfig.FeedConfig[]{
-          new BasicFeedConfig(new URL(DZONE), dragnetFilter, "dzone.xml", true),
-          new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", true),
-          new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", true),
-          new BasicFeedConfig(new URL(OREILLEY_FORUMS), dragnetFilter, "oreilley-forums.xml", true),
-          new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
-          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", true),
-          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), googleGroupsFilter, "ggroups-openshift.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), googleGroupsFilter, "ggroups-openstack.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), googleGroupsFilter, "ggroups-cloud-foundry.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), googleGroupsFilter, "ggroups-load-balancer.xml", true)
+          new BasicFeedConfig(new URL(DZONE), dragnetFilter, "dzone.xml", 5, true),
+          new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", 5, true),
+          new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", 5, true),
+          new BasicFeedConfig(new URL(OREILLEY_FORUMS), dragnetFilter, "oreilley-forums.xml", 5, true),
+          //new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
+          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", 5, true),
+          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", 5, true),
+          new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), googleGroupsFilter, "ggroups-openshift.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), googleGroupsFilter, "ggroups-openstack.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), googleGroupsFilter, "ggroups-cloud-foundry.xml", 120, true),
+          new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), googleGroupsFilter, "ggroups-load-balancer.xml", 120, true)
       };
     } catch (MalformedURLException e) {
       e.printStackTrace();
@@ -82,7 +81,6 @@ public class Service {
   private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private static final long REFRESH_PERIOD_IN_MINUTES = 120;
 
-  private final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
   private final Dragnet dragnet;
   private final ArrayList<File> webroots;
   private final int port;
@@ -94,10 +92,36 @@ public class Service {
     this.log = new File(webroot, "log.txt");
     this.errorLog = new File(webroot, "error-log.txt");
 
+    // set up a persisting feed fetcher for each feed
+    final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(feedConfigs.length + 1);
+    for (DragnetConfig.FeedConfig feedConfig : feedConfigs) {
+      info("schoduling feed persister for: " + feedConfig.getName());
+      executor.scheduleAtFixedRate((Runnable) () -> {
+        try {
+          new FeedPersister(webroot, System::currentTimeMillis, feedConfig).fetch();
+        } catch (IOException e) {
+          log(errorLog, e);
+        }
+      }, 0, feedConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
+    }
+
+    // Set up dragnet to read the persisted feeds
+    final DragnetConfig.FeedConfig[] dragnetFeeds = new DragnetConfig.FeedConfig[feedConfigs.length];
+    for (int i = 0; i < feedConfigs.length; i++) {
+      final DragnetConfig.FeedConfig config = feedConfigs[i];
+      dragnetFeeds[i] = new BasicFeedConfig(
+          new File(webroot, config.getName()).toURI().toURL(),
+          config.getFilter(),
+          config.getName(),
+          config.getRefreshPeriodMinutes(),
+          config.shouldWrite());
+    }
+
+
     this.dragnet = new Dragnet(new DragnetConfig() {
       @Override
-      public FeedConfig[] getFeeds() {
-        return feedConfigs;
+      public DragnetConfig.FeedConfig[] getFeeds() {
+        return dragnetFeeds;
       }
 
       @Override
@@ -114,22 +138,34 @@ public class Service {
       public File getWriteRoot() {
         return webroot;
       }
-    });
+    }
 
-    executor.scheduleAtFixedRate((Runnable) () -> {
-      try {
-        log("Refreshing dragnet feed...");
-        dragnet.read();
-        log("Done refreshing dragnet feed.");
-      } catch (Throwable e) {
-        handleError(e);
-      }
-    }, 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
+    );
+
+    executor.scheduleAtFixedRate((Runnable) () ->
+
+        {
+          try {
+            log("Refreshing dragnet feed...");
+            dragnet.read();
+            log("Done refreshing dragnet feed.");
+          } catch (Throwable e) {
+            handleError(e);
+          }
+        }
+
+        , 1000 * 60 * 60 * 20, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
 
     this.port = port;
     this.webroots = new ArrayList<>();
     webroots.add(webroot);
+
     log("Webroot: " + webroot);
+
+  }
+
+  private void info(final String s) {
+    log(log, s);
   }
 
   private void handleError(final Throwable e) {
@@ -172,8 +208,6 @@ public class Service {
     final Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces();
     while (ifaces.hasMoreElements()) {
       final NetworkInterface iface = ifaces.nextElement();
-      //System.out.println("iface: " + iface.getName());
-      final String name = iface.getName();
       final Enumeration<InetAddress> inetAddresses = iface.getInetAddresses();
       while (inetAddresses.hasMoreElements()) {
         final InetAddress inetAddress = inetAddresses.nextElement();
@@ -192,7 +226,6 @@ public class Service {
     if (args.length > 0) {
       webroot = new File(args[0]);
     }
-    final List<File> roots = new ArrayList<>();
     final Service service = new Service(8080, webroot);
     service.start();
   }

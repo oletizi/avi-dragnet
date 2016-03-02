@@ -47,6 +47,7 @@ public class FeedPersister {
 
   public void fetch() throws IOException {
     try {
+      info("Fetching feed: " + feedName);
       List<SyndEntry> filteredEntries = new ArrayList<>();
       filteredEntries.addAll(getArchivedEntries());
       info("starting with " + filteredEntries.size() + " archived entries");

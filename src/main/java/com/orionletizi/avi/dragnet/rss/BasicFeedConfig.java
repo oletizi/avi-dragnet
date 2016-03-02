@@ -16,6 +16,9 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
   private String name;
 
   @JsonProperty
+  private long refreshPeriodMinutes;
+
+  @JsonProperty
   private boolean shouldWrite;
 
   @SuppressWarnings("unused")
@@ -23,10 +26,11 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
     // for Jackson
   }
 
-  public BasicFeedConfig(final URL feedURL, final FeedFilter filter, final String name, final boolean shouldWrite) {
+  public BasicFeedConfig(final URL feedURL, final FeedFilter filter, final String name, long refreshPeriodMinutes, final boolean shouldWrite) {
     this.feedUrl = feedURL;
     this.filter = filter;
     this.name = name;
+    this.refreshPeriodMinutes = refreshPeriodMinutes;
     this.shouldWrite = shouldWrite;
   }
 
@@ -52,5 +56,10 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
 
   public void setFeedUrl(final URL feedUrl) {
     this.feedUrl = feedUrl;
+  }
+
+  @Override
+  public long getRefreshPeriodMinutes() {
+    return refreshPeriodMinutes;
   }
 }

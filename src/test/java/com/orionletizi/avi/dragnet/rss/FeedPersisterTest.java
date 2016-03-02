@@ -6,7 +6,6 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,8 +33,6 @@ public class FeedPersisterTest {
   private File workingDir;
   private int sequence;
   private String feedName;
-  private File feedSourceFile;
-  private File archive;
   private SequenceGenerator sequenceGenerator;
 
   @Before
@@ -47,12 +44,9 @@ public class FeedPersisterTest {
     assertNotNull(sampleFeed);
     sampleFeed2 = ClassLoader.getSystemResource("rss/sample-feed2.xml");
     sequence = 0;
-    feedConfig = new BasicFeedConfig(sampleFeed, entry -> entry, feedName, true);
+    feedConfig = new BasicFeedConfig(sampleFeed, entry -> entry, feedName, 10, true);
     sequenceGenerator = () -> ++sequence;
     persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig);
-    feedSourceFile = tmp.newFile();
-    FileUtils.copyURLToFile(sampleFeed, feedSourceFile);
-    this.archive = new File(workingDir, "archive");
   }
 
   @Test
@@ -100,9 +94,9 @@ public class FeedPersisterTest {
         getEntries(sampleFeed).size() + getEntries(sampleFeed2).size(), archivedEntries.size());
   }
 
-  private void ls(final File dir) {
-    FileUtils.listFiles(dir, null, false).forEach(System.out::println);
-  }
+//  private void ls(final File dir) {
+//    FileUtils.listFiles(dir, null, false).forEach(System.out::println);
+//  }
 
   private File getExpectedArchiveFile(final long seq) {
     return new File(workingDir, "archive/myFeed" + "-" + seq + ".xml");
