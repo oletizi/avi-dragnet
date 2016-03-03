@@ -64,13 +64,13 @@ public class Service {
       final Period maxAge = Period.ofDays(30);
       final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(scraper, dragnetFilter, maxAge);
       feedConfigs = new DragnetConfig.FeedConfig[]{
+          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", 5, true),
+          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", 5, true),
           new BasicFeedConfig(new URL(DZONE), dragnetFilter, "dzone.xml", 5, true),
           new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", 5, true),
           new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", 5, true),
           new BasicFeedConfig(new URL(OREILLEY_FORUMS), dragnetFilter, "oreilley-forums.xml", 5, true),
           //new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
-          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", 5, true),
-          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", 5, true),
           new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", 120, true),
           new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", 120, true),
           new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", 120, true),
