@@ -47,6 +47,8 @@
     <strong>${feed.name}</strong>
     <ul>
         <li><a href="${feed.link}">Link: ${feed.link}&nbsp;&rsaquo;</a></li>
+        <li><a href="${feed.localRawFeedUrl}">Raw Feed &rsaquo;</a></li>
+        <li><a href="${feed.localFilteredFeedUrl}">Filtered Feed &rsaquo;</a></li>
         <li>Size: ${feed.size}</li>
         <li>Last updated: ${feed.lastUpdated}</li>
         <li>Description<br/>

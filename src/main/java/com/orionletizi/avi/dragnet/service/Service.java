@@ -14,6 +14,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.SimpleWebServer;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -98,9 +99,20 @@ public class Service {
 
     // set up a persisting feed fetcher for each feed
     final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(feedConfigs.length + 3);
-    for (DragnetConfig.FeedConfig feedConfig : feedConfigs) {
-      final BasicFeedConfig persisterConfig = new BasicFeedConfig(feedConfig.getFeedUrl(), entry -> entry, feedConfig.getName(), feedConfig.getRefreshPeriodMinutes(), true);
-      info("schoduling feed persister for: " + feedConfig.getName());
+    final DragnetConfig.FeedConfig[] dragnetFeeds = new DragnetConfig.FeedConfig[feedConfigs.length];
+    for (int i = 0; i < feedConfigs.length; i++) {
+      final DragnetConfig.FeedConfig feedConfig = feedConfigs[i];
+      final String feedName = feedConfig.getName();
+      final String feedExtension = FilenameUtils.getExtension(feedName);
+      final String filteredFeedName = feedName.replace("." + feedExtension, "-filtered." + feedExtension);
+      final BasicFeedConfig persisterConfig = new BasicFeedConfig(
+          feedConfig.getFeedUrl(),
+          entry -> entry,
+          feedName,
+          feedConfig.getRefreshPeriodMinutes(),
+          true);
+
+      info("scheduling feed persister for: " + feedName);
       executor.scheduleWithFixedDelay((Runnable) () -> {
         try {
           new FeedPersister(webroot, System::currentTimeMillis, persisterConfig).fetch();
@@ -108,20 +120,32 @@ public class Service {
           log(errorLog, e);
         }
       }, 0, feedConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
-    }
 
-    // Set up the dragnet to read the persisted feeds
-    final DragnetConfig.FeedConfig[] dragnetFeeds = new DragnetConfig.FeedConfig[feedConfigs.length];
-    for (int i = 0; i < feedConfigs.length; i++) {
-      final DragnetConfig.FeedConfig config = feedConfigs[i];
+      info("scheduling a filtering feed persistor for: " + feedName);
+      final BasicFeedConfig filteredConfig = new BasicFeedConfig(
+          new File(webroot, feedName).toURI().toURL(),
+          feedConfig.getFilter(),
+          filteredFeedName,
+          feedConfig.getRefreshPeriodMinutes(),
+          true
+      );
+
+      executor.scheduleWithFixedDelay(() -> {
+        try {
+          new FeedPersister(webroot, System::currentTimeMillis, filteredConfig).fetch();
+        } catch (IOException e) {
+          log(errorLog, e);
+        }
+      }, 0, filteredConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
+
       dragnetFeeds[i] = new BasicFeedConfig(
-          new File(webroot, config.getName()).toURI().toURL(),
-          config.getFilter(),
-          config.getName(),
-          config.getRefreshPeriodMinutes(),
+          new File(webroot, filteredFeedName).toURI().toURL(),
+          event -> event,//config.getFilter(),
+          filteredFeedName,
+          feedConfig.getRefreshPeriodMinutes(),
           false);
     }
-
+    // Set up the dragnet to read and aggregate the persisted, filtered feeds
     this.dragnet = new Dragnet(new DragnetConfig() {
       @Override
       public DragnetConfig.FeedConfig[] getFeeds() {
@@ -143,7 +167,6 @@ public class Service {
         return webroot;
       }
     }
-
     );
 
     // Schedule dragnet
@@ -171,14 +194,51 @@ public class Service {
     executor.scheduleWithFixedDelay((Runnable) () -> {
       try {
         info("fetching feeds to write index...");
-        final List<SyndFeed> feeds = new ArrayList<>();
+        final List<IndexRenderer.FeedDescriptor> feeds = new ArrayList<>();
         for (DragnetConfig.FeedConfig config : feedConfigs) {
           final File feedFile = new File(webroot, config.getName());
           if (feedFile.exists()) {
             info("Fetching feed from file: " + feedFile);
             final SyndFeed feed = feedReader.build(new XmlReader(feedFile));
             info("Adding feed to index: " + feed.getTitle());
-            feeds.add(feed);
+            feeds.add(new IndexRenderer.FeedDescriptor() {
+              @Override
+              public String getName() {
+                return feed.getTitle();
+              }
+
+              @Override
+              public String getLink() {
+                return feed.getLink();
+              }
+
+              @Override
+              public String getLocalRawFeedUrl() {
+                return config.getName();
+              }
+
+              @Override
+              public String getLocalFilteredFeedUrl() {
+                String name = config.getName();
+                final String extension = FilenameUtils.getExtension(name);
+                return name.replace("." + extension, "-filtered." + extension);
+              }
+
+              @Override
+              public String getDescription() {
+                return feed.getDescription();
+              }
+
+              @Override
+              public int getSize() {
+                return feed.getEntries().size();
+              }
+
+              @Override
+              public String getLastUpdated() {
+                return feed.getPublishedDate() == null ? "unknown" : feed.getPublishedDate().toString();
+              }
+            });
           } else {
             info("Feed file doesn't exist: " + feedFile);
           }
@@ -253,7 +313,9 @@ public class Service {
   }
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
-    LoggerImpl.turnOff(FeedPersister.class);
+    LoggerImpl.turnOff(Dragnet.class);
+    //LoggerImpl.turnOff(FeedPersister.class);
+    LoggerImpl.turnOff(GoogleGroupsDateScraper.class);
     File webroot = new File("/tmp");
     if (args.length > 0) {
       webroot = new File(args[0]);

@@ -2,6 +2,8 @@ package com.orionletizi.avi.dragnet.rss.filters;
 
 import com.joestelmach.natty.DateGroup;
 import com.joestelmach.natty.Parser;
+import com.orionletizi.util.logging.Logger;
+import com.orionletizi.util.logging.LoggerImpl;
 import com.orionletizi.web.Phantom;
 import net.fortuna.ical4j.model.DateTime;
 import org.apache.commons.io.IOUtils;
@@ -15,6 +17,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class GoogleGroupsDateScraper {
+  private static final Logger logger = LoggerImpl.forClass(GoogleGroupsDateScraper.class);
+
   private static final DateFormat df = new SimpleDateFormat("MM/dd/yy");
   private Duration timeout;
   private final Set<Date> dates = new TreeSet<>();
@@ -98,6 +102,6 @@ public class GoogleGroupsDateScraper {
   }
 
   private void info(final String line) {
-    System.out.println(getClass().getSimpleName() + ": " + line);
+    logger.info(line);
   }
 }

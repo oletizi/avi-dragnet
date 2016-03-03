@@ -1,7 +1,7 @@
 package com.orionletizi.avi.dragnet.service;
 
 import com.orionletizi.avi.dragnet.template.TemplateProcessor;
-import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.feed.atom.Feed;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;
@@ -18,48 +18,23 @@ public final class IndexRenderer {
     processor = new TemplateProcessor("/template");
   }
 
-  public void render(final List<SyndFeed> feeds, final Writer out) throws IOException, TemplateException {
+  public void render(final List<FeedDescriptor> feeds, final Writer out) throws IOException, TemplateException {
     final List<Feed> wrapped = new ArrayList<>();
 
-    final Map<String, List<Feed>> model = new HashMap<>();
-    for (SyndFeed feed : feeds) {
-      wrapped.add(new Feed() {
-        @Override
-        public String getName() {
-          return feed.getTitle();
-        }
+    final Map<String, List<FeedDescriptor>> model = new HashMap<>();
 
-        @Override
-        public String getLink() {
-          return feed.getLink();
-        }
-
-        @Override
-        public String getDescription() {
-          return feed.getDescription();
-        }
-
-        @Override
-        public int getSize() {
-          return feed.getEntries().size();
-        }
-
-        @Override
-        public String getLastUpdated() {
-          return feed.getPublishedDate() == null ? "unknown" : feed.getPublishedDate().toString();
-        }
-      });
-    }
-
-
-    model.put("feeds", wrapped);
+    model.put("feeds", feeds);
     processor.process(model, "index.ftl", out);
   }
 
-  public interface Feed {
+  public interface FeedDescriptor {
     String getName();
 
     String getLink();
+
+    String getLocalRawFeedUrl();
+
+    String getLocalFilteredFeedUrl();
 
     String getDescription();
 

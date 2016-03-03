@@ -1,5 +1,7 @@
 package com.orionletizi.avi.dragnet.rss;
 
+import com.orionletizi.util.logging.Logger;
+import com.orionletizi.util.logging.LoggerImpl;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.feed.synd.SyndFeedImpl;
@@ -19,7 +21,8 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class Dragnet {
-  private final ExecutorService executor = Executors.newSingleThreadExecutor();
+  private static final Logger logger = LoggerImpl.forClass(Dragnet.class);
+  private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   private final DragnetConfig config;
 
@@ -109,7 +112,7 @@ public class Dragnet {
   }
 
   private void info(final String s) {
-    System.out.println(getClass().getSimpleName() + ": " + s);
+    logger.info(s);
   }
 
   private static Options getOptions() {
