@@ -47,7 +47,7 @@ public class RegexFilter implements FeedFilter {
   }
 
   private String tagValue(final String value) {
-    return value + " &lt; DRAGNET MATCH: " + pattern + "&gt";
+    return value + " &lt; DRAGNET MATCH: " + pattern + " &gt;";
   }
 
   private void info(Object msg) {
