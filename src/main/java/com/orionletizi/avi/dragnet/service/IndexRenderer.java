@@ -40,6 +40,8 @@ public final class IndexRenderer {
 
     int getSize();
 
+    int getFilteredSize();
+
     String getLastUpdated();
   }
 }

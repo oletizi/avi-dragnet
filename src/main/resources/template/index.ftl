@@ -46,12 +46,11 @@
 <#list feeds as feed>
     <strong>${feed.name}</strong>
     <ul>
-        <li><a href="${feed.link}">Link: ${feed.link}&nbsp;&rsaquo;</a></li>
-        <li><a href="${feed.localRawFeedUrl}">Raw Feed &rsaquo;</a></li>
-        <li><a href="${feed.localFilteredFeedUrl}">Filtered Feed &rsaquo;</a></li>
-        <li>Size: ${feed.size}</li>
-        <li>Last updated: ${feed.lastUpdated}</li>
-        <li>Description<br/>
+        <li><a href="${feed.link}">${feed.link}&nbsp;&rsaquo;</a></li>
+        <li><a href="${feed.localRawFeedUrl}">Unfiltered Feed (${feed.size} entries) &rsaquo;</a></li>
+        <li><a href="${feed.localFilteredFeedUrl}">Filtered Feed (${feed.filteredSize} entries) &rsaquo;</a></li>
+        <li><strong>Last updated:</strong> ${feed.lastUpdated}</li>
+        <li><strong>Description</strong><br/>
         ${feed.description}
         </li>
     </ul>

@@ -103,8 +103,7 @@ public class Service {
     for (int i = 0; i < feedConfigs.length; i++) {
       final DragnetConfig.FeedConfig feedConfig = feedConfigs[i];
       final String feedName = feedConfig.getName();
-      final String feedExtension = FilenameUtils.getExtension(feedName);
-      final String filteredFeedName = feedName.replace("." + feedExtension, "-filtered." + feedExtension);
+      final String filteredFeedName = getFilteredFeedName(feedName);
       final BasicFeedConfig persisterConfig = new BasicFeedConfig(
           feedConfig.getFeedUrl(),
           entry -> entry,
@@ -190,7 +189,7 @@ public class Service {
     // set up index renderer
     final IndexRenderer indexRenderer = new IndexRenderer();
     final SyndFeedInput feedReader = new SyndFeedInput();
-    info("Scheduling the index writier...");
+    info("Scheduling the index writer...");
     executor.scheduleWithFixedDelay((Runnable) () -> {
       try {
         info("fetching feeds to write index...");
@@ -220,8 +219,7 @@ public class Service {
               @Override
               public String getLocalFilteredFeedUrl() {
                 String name = config.getName();
-                final String extension = FilenameUtils.getExtension(name);
-                return name.replace("." + extension, "-filtered." + extension);
+                return getFilteredFeedName(name);
               }
 
               @Override
@@ -232,6 +230,15 @@ public class Service {
               @Override
               public int getSize() {
                 return feed.getEntries().size();
+              }
+
+              @Override
+              public int getFilteredSize() {
+                try {
+                  return feedReader.build(new XmlReader(new File(webroot, getFilteredFeedName(config.getName())))).getEntries().size();
+                } catch (FeedException | IOException e) {
+                  return -1;
+                }
               }
 
               @Override
@@ -252,6 +259,11 @@ public class Service {
         handleError(e);
       }
     }, 0, 10, TimeUnit.SECONDS);
+  }
+
+  private String getFilteredFeedName(final String name) {
+    final String extension = FilenameUtils.getExtension(name);
+    return name.replace("." + extension, "-filtered." + extension);
   }
 
   private void info(final String s) {
