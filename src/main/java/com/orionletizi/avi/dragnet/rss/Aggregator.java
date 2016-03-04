@@ -11,7 +11,6 @@ import com.rometools.rome.io.SyndFeedOutput;
 import com.rometools.rome.io.XmlReader;
 import org.apache.commons.cli.*;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,20 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class Dragnet {
-  private static final Logger logger = LoggerImpl.forClass(Dragnet.class);
+public class Aggregator {
+  private static final Logger logger = LoggerImpl.forClass(Aggregator.class);
   private static final ExecutorService executor = Executors.newSingleThreadExecutor();
 
   private final DragnetConfig config;
 
-  public Dragnet(final DragnetConfig config) {
+  public Aggregator(final DragnetConfig config) {
     this.config = config;
   }
 
-  public void read() throws IOException, FeedException {
+  public void aggregate() throws IOException, FeedException {
     final SyndFeedInput input = new SyndFeedInput();
-    final List<SyndEntry> filteredEntries = new ArrayList<>();
-    final List<SyndEntry> rawEntries = new ArrayList<>();
+    final List<SyndEntry> aggregatedEntries = new ArrayList<>();
     final SyndFeedOutput feedWriter = new SyndFeedOutput();
     info("fetching feeds...");
 
@@ -53,13 +51,13 @@ public class Dragnet {
       });
 
       try {
-        info("Waiting for feed read: " + url + "...");
+        info("Waiting for feed aggregate: " + url + "...");
         task.get(3, TimeUnit.SECONDS);
-        info("successfully read feed: " + url);
+        info("successfully aggregated feed: " + url);
       } catch (InterruptedException | ExecutionException | TimeoutException e) {
         handleError(e);
         // screw this feed. Move on to the next one
-        info("Couldn't read feed in time. Moving to the next feed.");
+        info("Couldn't aggregate feed in time. Moving to the next feed.");
         continue;
       }
 
@@ -67,42 +65,27 @@ public class Dragnet {
         continue;
       }
 
-      if (feedConfig.shouldWrite()) {
-        // write this source feed to local disk
-        final File outfile = new File(config.getWriteRoot(), feedConfig.getName());
-        info("Writing to " + outfile);
-        feedWriter.output(feed[0], outfile);
-      }
-
-      rawEntries.addAll(feed[0].getEntries());
+      info("Aggregated entries before adding : " + feedConfig.getFeedUrl() + ": " + aggregatedEntries.size());
+      info(feedConfig.getFeedUrl() + " contains " + feed[0].getEntries().size() + " entries");
       for (SyndEntry entry : feed[0].getEntries()) {
         final SyndEntry filtered = feedConfig.getFilter().filter(entry);
         if (filtered != null) {
           info("Entry passed filter...");
-          filteredEntries.add(filtered);
+          aggregatedEntries.add(filtered);
         }
       }
+      info("Aggregated entries after: " + aggregatedEntries.size());
     }
 
-    final SyndFeed filteredOut = new SyndFeedImpl();
-    filteredOut.setTitle("Avi Dragnet");
-    filteredOut.setDescription("Avi Dragnet");
-    filteredOut.setFeedType("atom_1.0");
-    filteredOut.setLink("http://some.website.com/");
-    filteredOut.setEntries(filteredEntries);
+    final SyndFeed aggregatedOut = new SyndFeedImpl();
+    aggregatedOut.setTitle("Avi Aggregator");
+    aggregatedOut.setDescription("Avi Aggregator");
+    aggregatedOut.setFeedType("atom_1.0");
+    aggregatedOut.setLink("http://some.website.com/");
+    aggregatedOut.setEntries(aggregatedEntries);
 
-    final SyndFeed rawout = new SyndFeedImpl();
-    rawout.setTitle("Avi Dragnet Raw Aggregate Feed");
-    rawout.setDescription("Raw aggregate of all Avi Dragnet sources with no filtering applied");
-    rawout.setFeedType("atom_1.0");
-    rawout.setLink("http://some.other.website.com/");
-    rawout.setEntries(rawEntries);
-
-    info("Writing filtered feed to " + config.getFilteredOutputFile());
-    feedWriter.output(filteredOut, config.getFilteredOutputFile());
-
-    info("Writing raw feed to " + config.getRawOutputFile());
-    feedWriter.output(rawout, config.getRawOutputFile());
+    info("Writing filtered feed to " + config.getOutpuFile());
+    feedWriter.output(aggregatedOut, config.getOutpuFile());
 
     info("Done reading feeds.");
   }
@@ -179,7 +162,7 @@ public class Dragnet {
       }
 
       throw new RuntimeException("Implement Me!");
-//      new Dragnet(Arrays.asList(urls), rawOutput, filteredOutput).fetch();
+//      new Aggregator(Arrays.asList(urls), rawOutput, filteredOutput).fetch();
 
 
     } catch (ParseException e) {
@@ -188,6 +171,6 @@ public class Dragnet {
   }
 
   private static void usage() {
-    new HelpFormatter().printHelp("java [vm options] " + Dragnet.class.getName(), getOptions());
+    new HelpFormatter().printHelp("java [vm options] " + Aggregator.class.getName(), getOptions());
   }
 }

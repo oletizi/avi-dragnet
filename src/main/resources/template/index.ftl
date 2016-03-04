@@ -30,7 +30,9 @@
 <div id="container">
     <h1>Avi Dragnet</h1>
 
-    <div><a class="button" href="/filtered.xml">Subscribe here&nbsp;&rsaquo;</a></div>
+    <div><a class="button" href="http://feeds.feedburner.com/AviDragnet">Subscribe here&nbsp;&rsaquo;</a></div>
+    <p style="margin-top: 40px; margin-left: 16px; font-size: 10px"><a href="/filtered.xml">Local feed&nbsp;&rsaquo;</a>
+    </p>
 
     <p style="margin-top: 50px">
         The Avi Dragnet is an RSS feed concatenated from multiple sources around the web, including Google Groups,

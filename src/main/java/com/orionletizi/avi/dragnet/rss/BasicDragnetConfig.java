@@ -5,15 +5,13 @@ import java.io.File;
 public class BasicDragnetConfig implements DragnetConfig {
 
   private final FeedConfig[] feeds;
-  private File writeRoot;
-  private final File rawOutputFile;
-  private final File filteredOutputFile;
+  private FeedConfig outputConfig;
+  private File outputFile;
 
-  public BasicDragnetConfig(final FeedConfig[] feeds, final File writeRoot, final File rawOutputFile, final File filteredOutputFile) {
+  public BasicDragnetConfig(final FeedConfig[] feeds, final FeedConfig outputConfig, final File outputFile) {
     this.feeds = feeds;
-    this.writeRoot = writeRoot;
-    this.rawOutputFile = rawOutputFile;
-    this.filteredOutputFile = filteredOutputFile;
+    this.outputConfig = outputConfig;
+    this.outputFile = outputFile;
   }
 
   @Override
@@ -22,17 +20,8 @@ public class BasicDragnetConfig implements DragnetConfig {
   }
 
   @Override
-  public File getFilteredOutputFile() {
-    return filteredOutputFile;
+  public File getOutpuFile() {
+    return outputFile;
   }
 
-  @Override
-  public File getRawOutputFile() {
-    return rawOutputFile;
-  }
-
-  @Override
-  public File getWriteRoot() {
-    return writeRoot;
-  }
 }

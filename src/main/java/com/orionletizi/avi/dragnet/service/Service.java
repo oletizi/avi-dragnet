@@ -1,7 +1,7 @@
 package com.orionletizi.avi.dragnet.service;
 
+import com.orionletizi.avi.dragnet.rss.Aggregator;
 import com.orionletizi.avi.dragnet.rss.BasicFeedConfig;
-import com.orionletizi.avi.dragnet.rss.Dragnet;
 import com.orionletizi.avi.dragnet.rss.DragnetConfig;
 import com.orionletizi.avi.dragnet.rss.FeedPersister;
 import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
@@ -87,7 +87,7 @@ public class Service {
   private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
   private static final long REFRESH_PERIOD_IN_MINUTES = 1;
 
-  private final Dragnet dragnet;
+  private final Aggregator aggregator;
   private final ArrayList<File> webroots;
   private final int port;
   private final File log;
@@ -144,41 +144,35 @@ public class Service {
           feedConfig.getRefreshPeriodMinutes(),
           false);
     }
-    // Set up the dragnet to read and aggregate the persisted, filtered feeds
-    this.dragnet = new Dragnet(new DragnetConfig() {
+    // Set up the aggregator to aggregate and aggregate the persisted, filtered feeds
+    this.aggregator = new Aggregator(new DragnetConfig() {
       @Override
       public DragnetConfig.FeedConfig[] getFeeds() {
         return dragnetFeeds;
       }
 
       @Override
-      public File getFilteredOutputFile() {
+      public File getOutpuFile() {
         return new File(webroot, "filtered.xml");
       }
 
-      @Override
-      public File getRawOutputFile() {
-        return new File(webroot, "raw.xml");
-      }
+    });
 
-      @Override
-      public File getWriteRoot() {
-        return webroot;
-      }
-    }
-    );
+    // Schedule aggregator
 
-    // Schedule dragnet
+    executor.scheduleWithFixedDelay((Runnable) () ->
 
-    executor.scheduleWithFixedDelay((Runnable) () -> {
-      try {
-        log("Refreshing dragnet feed...");
-        dragnet.read();
-        log("Done refreshing dragnet feed.");
-      } catch (Throwable e) {
-        handleError(e);
-      }
-    }, 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
+        {
+          try {
+            log("Refreshing aggregator feed...");
+            aggregator.aggregate();
+            log("Done refreshing aggregator feed.");
+          } catch (Throwable e) {
+            handleError(e);
+          }
+        }
+
+        , 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
 
     this.port = port;
     this.webroots = new ArrayList<>();
@@ -189,76 +183,82 @@ public class Service {
     // set up index renderer
     final IndexRenderer indexRenderer = new IndexRenderer();
     final SyndFeedInput feedReader = new SyndFeedInput();
+
     info("Scheduling the index writer...");
-    executor.scheduleWithFixedDelay((Runnable) () -> {
-      try {
-        info("fetching feeds to write index...");
-        final List<IndexRenderer.FeedDescriptor> feeds = new ArrayList<>();
-        for (DragnetConfig.FeedConfig config : feedConfigs) {
-          final File feedFile = new File(webroot, config.getName());
-          if (feedFile.exists()) {
-            info("Fetching feed from file: " + feedFile);
-            final SyndFeed feed = feedReader.build(new XmlReader(feedFile));
-            info("Adding feed to index: " + feed.getTitle());
-            feeds.add(new IndexRenderer.FeedDescriptor() {
-              @Override
-              public String getName() {
-                return feed.getTitle();
-              }
 
-              @Override
-              public String getLink() {
-                return feed.getLink();
-              }
+    executor.scheduleWithFixedDelay((Runnable) () ->
 
-              @Override
-              public String getLocalRawFeedUrl() {
-                return config.getName();
-              }
+        {
+          try {
+            info("fetching feeds to write index...");
+            final List<IndexRenderer.FeedDescriptor> feeds = new ArrayList<>();
+            for (DragnetConfig.FeedConfig config : feedConfigs) {
+              final File feedFile = new File(webroot, config.getName());
+              if (feedFile.exists()) {
+                info("Fetching feed from file: " + feedFile);
+                final SyndFeed feed = feedReader.build(new XmlReader(feedFile));
+                info("Adding feed to index: " + feed.getTitle());
+                feeds.add(new IndexRenderer.FeedDescriptor() {
+                  @Override
+                  public String getName() {
+                    return feed.getTitle();
+                  }
 
-              @Override
-              public String getLocalFilteredFeedUrl() {
-                String name = config.getName();
-                return getFilteredFeedName(name);
-              }
+                  @Override
+                  public String getLink() {
+                    return feed.getLink();
+                  }
 
-              @Override
-              public String getDescription() {
-                return feed.getDescription();
-              }
+                  @Override
+                  public String getLocalRawFeedUrl() {
+                    return config.getName();
+                  }
 
-              @Override
-              public int getSize() {
-                return feed.getEntries().size();
-              }
+                  @Override
+                  public String getLocalFilteredFeedUrl() {
+                    String name = config.getName();
+                    return getFilteredFeedName(name);
+                  }
 
-              @Override
-              public int getFilteredSize() {
-                try {
-                  return feedReader.build(new XmlReader(new File(webroot, getFilteredFeedName(config.getName())))).getEntries().size();
-                } catch (FeedException | IOException e) {
-                  return -1;
-                }
-              }
+                  @Override
+                  public String getDescription() {
+                    return feed.getDescription();
+                  }
 
-              @Override
-              public String getLastUpdated() {
-                return feed.getPublishedDate() == null ? "unknown" : feed.getPublishedDate().toString();
+                  @Override
+                  public int getSize() {
+                    return feed.getEntries().size();
+                  }
+
+                  @Override
+                  public int getFilteredSize() {
+                    try {
+                      return feedReader.build(new XmlReader(new File(webroot, getFilteredFeedName(config.getName())))).getEntries().size();
+                    } catch (FeedException | IOException e) {
+                      return -1;
+                    }
+                  }
+
+                  @Override
+                  public String getLastUpdated() {
+                    return feed.getPublishedDate() == null ? "unknown" : feed.getPublishedDate().toString();
+                  }
+                });
+              } else {
+                info("Feed file doesn't exist: " + feedFile);
               }
-            });
-          } else {
-            info("Feed file doesn't exist: " + feedFile);
+            }
+            final File outfile = new File(webroot, "index.html");
+            info("Writing to " + outfile);
+            final FileWriter out = new FileWriter(outfile);
+            indexRenderer.render(feeds, out);
+            out.close();
+          } catch (Exception e) {
+            handleError(e);
           }
         }
-        final File outfile = new File(webroot, "index.html");
-        info("Writing to " + outfile);
-        final FileWriter out = new FileWriter(outfile);
-        indexRenderer.render(feeds, out);
-        out.close();
-      } catch (Exception e) {
-        handleError(e);
-      }
-    }, 0, 10, TimeUnit.SECONDS);
+
+        , 0, 10, TimeUnit.SECONDS);
   }
 
   private String getFilteredFeedName(final String name) {
@@ -325,8 +325,8 @@ public class Service {
   }
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
-    LoggerImpl.turnOff(Dragnet.class);
-    //LoggerImpl.turnOff(FeedPersister.class);
+    //LoggerImpl.turnOff(Aggregator.class);
+    LoggerImpl.turnOff(FeedPersister.class);
     LoggerImpl.turnOff(GoogleGroupsDateScraper.class);
     File webroot = new File("/tmp");
     if (args.length > 0) {

@@ -49,11 +49,6 @@ public class BasicFeedConfig implements DragnetConfig.FeedConfig {
     return name;
   }
 
-  @Override
-  public boolean shouldWrite() {
-    return shouldWrite;
-  }
-
   public void setFeedUrl(final URL feedUrl) {
     this.feedUrl = feedUrl;
   }

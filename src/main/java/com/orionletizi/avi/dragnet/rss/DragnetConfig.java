@@ -8,19 +8,13 @@ public interface DragnetConfig {
 
   FeedConfig[] getFeeds();
 
-  File getFilteredOutputFile();
-
-  File getRawOutputFile();
-
-  File getWriteRoot();
+  File getOutpuFile();
 
   public interface FeedConfig {
 
     URL getFeedUrl();
 
     String getName();
-
-    boolean shouldWrite();
 
     FeedFilter getFilter();
 
