@@ -81,7 +81,7 @@ public class Aggregator {
     aggregatedOut.setTitle("Avi Aggregator");
     aggregatedOut.setDescription("Avi Aggregator");
     aggregatedOut.setFeedType("atom_1.0");
-    aggregatedOut.setLink("http://some.website.com/");
+    aggregatedOut.setLink("http://dragnet.aviplayground.com:8080/filtered.xml");
     aggregatedOut.setEntries(aggregatedEntries);
 
     info("Writing filtered feed to " + config.getOutpuFile());
