@@ -64,8 +64,8 @@ public class Service {
       final Period maxAge = Period.ofDays(30);
       final GoogleGroupsFilter googleGroupsFilter = new GoogleGroupsFilter(scraper, dragnetFilter, maxAge);
       feedConfigs = new DragnetConfig.FeedConfig[]{
-          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", 5, true),
-          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", 5, true),
+          new BasicFeedConfig(new URL(STACK_OVERFLOW), dragnetFilter, "stack-overflow.xml", 1, true),
+          new BasicFeedConfig(new URL(SERVER_FAULT), dragnetFilter, "server-fault.xml", 1, true),
           new BasicFeedConfig(new URL(DZONE), dragnetFilter, "dzone.xml", 5, true),
           new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", 5, true),
           new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", 5, true),
@@ -326,7 +326,7 @@ public class Service {
 
   public static void main(String[] args) throws InterruptedException, IOException, FeedException {
     //LoggerImpl.turnOff(Aggregator.class);
-    LoggerImpl.turnOff(FeedPersister.class);
+    //LoggerImpl.turnOff(FeedPersister.class);
     LoggerImpl.turnOff(GoogleGroupsDateScraper.class);
     File webroot = new File("/tmp");
     if (args.length > 0) {

@@ -1,11 +1,16 @@
 package com.orionletizi.avi.dragnet.rss.filters;
 
 import com.orionletizi.avi.dragnet.rss.FeedFilter;
+import com.orionletizi.util.logging.Logger;
+import com.orionletizi.util.logging.LoggerImpl;
 import com.rometools.rome.feed.synd.SyndEntry;
 
 import java.util.Date;
 
 public class After implements FeedFilter {
+
+  private static final Logger logger = LoggerImpl.forClass(After.class);
+
   private DateSource dateSource;
 
   public After(final DateSource dateSource) {
@@ -15,7 +20,10 @@ public class After implements FeedFilter {
   @Override
   public SyndEntry filter(final SyndEntry entry) {
     final Date updatedDate = entry.getUpdatedDate();
-    return (isAfter(entry.getPublishedDate()) || isAfter(entry.getUpdatedDate())) ? entry : null;
+    final boolean isAfter = isAfter(entry.getPublishedDate()) || isAfter(entry.getUpdatedDate());
+    SyndEntry rv = isAfter ? entry : null;
+    info("entry is after: " + isAfter + "; published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate() + ", returning null: " + (rv == null));
+    return rv;
   }
 
   private boolean isAfter(final Date entryDate) {
@@ -24,5 +32,9 @@ public class After implements FeedFilter {
 
   public static interface DateSource {
     Date getDate();
+  }
+
+  private void info(final Object o) {
+    logger.info(o);
   }
 }

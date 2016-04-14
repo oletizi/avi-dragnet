@@ -1,5 +1,7 @@
 package com.orionletizi.avi.dragnet.rss;
 
+import com.orionletizi.avi.dragnet.rss.filters.After;
+import com.orionletizi.avi.dragnet.rss.filters.And;
 import com.orionletizi.util.SequenceGenerator;
 import com.orionletizi.util.logging.Logger;
 import com.orionletizi.util.logging.LoggerImpl;
@@ -18,9 +20,13 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FeedPersister {
+
+  public static final long MAX_DAYS = 1000 * 60 * 60 * 24 * 3;
+
 
   public static final String PERSISTENCE_PATH = "archive";
   private static final Logger logger = LoggerImpl.forClass(FeedPersister.class);
@@ -30,6 +36,7 @@ public class FeedPersister {
   private final String feedName;
   private final SyndFeedInput feedReader;
   private final Dedupe dedupe;
+  private final After after;
   private File workingDir;
   private SequenceGenerator sequenceGenerator;
 
@@ -40,7 +47,10 @@ public class FeedPersister {
     if (feedUrl == null) {
       throw new IllegalArgumentException("Null feed url.");
     }
-    filter = config.getFilter() == null ? feed -> feed : config.getFilter();
+    after = new After(() -> new Date(System.currentTimeMillis() - MAX_DAYS));
+    filter = new And()
+        .add(after)
+        .add(config.getFilter() == null ? feed -> feed : config.getFilter());
     feedName = config.getName();
     feedReader = new SyndFeedInput();
     feedWriter = new SyndFeedOutput();
@@ -55,9 +65,13 @@ public class FeedPersister {
       info("starting with " + filteredEntries.size() + " archived entries");
       final SyndFeed feed = feedReader.build(new XmlReader(feedUrl));
       for (SyndEntry entry : feed.getEntries()) {
+        info("Filtering with filter: " + filter);
         final SyndEntry filtered = filter.filter(entry);
         if (filtered != null) {
+          info("Entry passed filter. Published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate());
           filteredEntries.add(filtered);
+        } else {
+          info("Entry did NOT pass filter. Published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate());
         }
       }
       info("Feed after fetching latest entries: " + filteredEntries.size());
@@ -88,8 +102,13 @@ public class FeedPersister {
     if (latestArchive != null) {
       final SyndFeed feed = feedReader.build(new XmlReader(latestArchive));
       final List<SyndEntry> entries = feed.getEntries();
-      info("Found " + entries.size() + " archived entries.");
-      rv.addAll(entries);
+      info("Found " + entries.size() + " archived entries. Filtering for recency with After filter: " + after);
+      for (SyndEntry entry : entries) {
+        if (after.filter(entry) != null) {
+          rv.add(entry);
+        }
+      }
+      info("Archive size after recency filter: " + rv.size());
     }
     return rv;
   }
