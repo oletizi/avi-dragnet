@@ -4,6 +4,7 @@ import com.orionletizi.avi.dragnet.rss.Aggregator;
 import com.orionletizi.avi.dragnet.rss.BasicFeedConfig;
 import com.orionletizi.avi.dragnet.rss.DragnetConfig;
 import com.orionletizi.avi.dragnet.rss.FeedPersister;
+import com.orionletizi.avi.dragnet.rss.filters.After;
 import com.orionletizi.avi.dragnet.rss.filters.DragnetFilter;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsDateScraper;
 import com.orionletizi.avi.dragnet.rss.filters.GoogleGroupsFilter;
@@ -39,6 +40,10 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Service {
+  public static final long MAX_DAYS = 1000 * 60 * 60 * 24 * 3;
+
+  private static final After MAX_AGE_FILTER = new After(() -> new Date(System.currentTimeMillis() - MAX_DAYS));
+
   final static String DZONE = "http://feeds.dzone.com/home";
   final static String INFOQ = "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj";
   final static String OREILLEY_RADAR = "http://feeds.feedburner.com/oreilly/radar/atom";
@@ -112,9 +117,9 @@ public class Service {
           true);
 
       info("scheduling feed persister for: " + feedName);
-      executor.scheduleWithFixedDelay((Runnable) () -> {
+      executor.scheduleWithFixedDelay(() -> {
         try {
-          new FeedPersister(webroot, System::currentTimeMillis, persisterConfig).fetch();
+          new FeedPersister(webroot, System::currentTimeMillis, persisterConfig, MAX_AGE_FILTER).fetch();
         } catch (IOException e) {
           log(errorLog, e);
         }
@@ -131,7 +136,7 @@ public class Service {
 
       executor.scheduleWithFixedDelay(() -> {
         try {
-          new FeedPersister(webroot, System::currentTimeMillis, filteredConfig).fetch();
+          new FeedPersister(webroot, System::currentTimeMillis, filteredConfig, MAX_AGE_FILTER).fetch();
         } catch (IOException e) {
           log(errorLog, e);
         }

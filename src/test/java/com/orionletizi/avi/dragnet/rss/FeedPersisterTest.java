@@ -1,5 +1,6 @@
 package com.orionletizi.avi.dragnet.rss;
 
+import com.orionletizi.avi.dragnet.rss.filters.PassthroughFilter;
 import com.orionletizi.util.SequenceGenerator;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -46,7 +47,7 @@ public class FeedPersisterTest {
     sequence = 0;
     feedConfig = new BasicFeedConfig(sampleFeed, entry -> entry, feedName, 10, true);
     sequenceGenerator = () -> ++sequence;
-    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig);
+    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig, new PassthroughFilter());
   }
 
   @Test
@@ -86,7 +87,7 @@ public class FeedPersisterTest {
     feedConfig.setFeedUrl(sampleFeed2);
     expectedArchive = getExpectedArchiveFile(sequence + 1);
     assertFalse(expectedArchive.exists());
-    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig);
+    persister = new FeedPersister(workingDir, sequenceGenerator, feedConfig, new PassthroughFilter());
     persister.fetch();
     assertTrue(expectedArchive.exists());
     archivedEntries = getEntries(expectedArchive);

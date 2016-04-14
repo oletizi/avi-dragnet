@@ -1,6 +1,5 @@
 package com.orionletizi.avi.dragnet.rss;
 
-import com.orionletizi.avi.dragnet.rss.filters.After;
 import com.orionletizi.avi.dragnet.rss.filters.And;
 import com.orionletizi.util.SequenceGenerator;
 import com.orionletizi.util.logging.Logger;
@@ -20,13 +19,9 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class FeedPersister {
-
-  public static final long MAX_DAYS = 1000 * 60 * 60 * 24 * 3;
-
 
   public static final String PERSISTENCE_PATH = "archive";
   private static final Logger logger = LoggerImpl.forClass(FeedPersister.class);
@@ -36,20 +31,24 @@ public class FeedPersister {
   private final String feedName;
   private final SyndFeedInput feedReader;
   private final Dedupe dedupe;
-  private final After after;
+  private final FeedFilter archiveFilter;
   private File workingDir;
   private SequenceGenerator sequenceGenerator;
 
-  public FeedPersister(final File workingDir, final SequenceGenerator sequenceGenerator, final DragnetConfig.FeedConfig config) {
+  public FeedPersister(final File workingDir,
+                       final SequenceGenerator sequenceGenerator,
+                       final DragnetConfig.FeedConfig config,
+                       final FeedFilter archiveFilter) {
     this.workingDir = workingDir;
     this.sequenceGenerator = sequenceGenerator;
+    this.archiveFilter = archiveFilter;
     feedUrl = config.getFeedUrl();
     if (feedUrl == null) {
       throw new IllegalArgumentException("Null feed url.");
     }
-    after = new After(() -> new Date(System.currentTimeMillis() - MAX_DAYS));
+    //this.archiveFilter = new After(() -> new Date(System.currentTimeMillis() - MAX_DAYS));
     filter = new And()
-        .add(after)
+        .add(this.archiveFilter)
         .add(config.getFilter() == null ? feed -> feed : config.getFilter());
     feedName = config.getName();
     feedReader = new SyndFeedInput();
@@ -74,9 +73,9 @@ public class FeedPersister {
           info("Entry did NOT pass filter. Published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate());
         }
       }
-      info("Feed after fetching latest entries: " + filteredEntries.size());
+      info("Feed archiveFilter fetching latest entries: " + filteredEntries.size());
       filteredEntries = dedupe.dedupe(filteredEntries);
-      info("Feed after deduplication: " + filteredEntries.size());
+      info("Feed archiveFilter deduplication: " + filteredEntries.size());
       final String extension = FilenameUtils.getExtension(feedName);
       final File archive = new File(workingDir, PERSISTENCE_PATH + "/" + feedName.replace("." + extension, "-" + sequenceGenerator.next() + "." + extension));
       final File publish = new File(workingDir, feedName);
@@ -102,13 +101,13 @@ public class FeedPersister {
     if (latestArchive != null) {
       final SyndFeed feed = feedReader.build(new XmlReader(latestArchive));
       final List<SyndEntry> entries = feed.getEntries();
-      info("Found " + entries.size() + " archived entries. Filtering for recency with After filter: " + after);
+      info("Found " + entries.size() + " archived entries. Filtering for recency with After filter: " + archiveFilter);
       for (SyndEntry entry : entries) {
-        if (after.filter(entry) != null) {
+        if (archiveFilter.filter(entry) != null) {
           rv.add(entry);
         }
       }
-      info("Archive size after recency filter: " + rv.size());
+      info("Archive size archiveFilter recency filter: " + rv.size());
     }
     return rv;
   }
