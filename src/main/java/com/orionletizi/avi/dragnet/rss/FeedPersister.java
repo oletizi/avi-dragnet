@@ -58,30 +58,23 @@ public class FeedPersister {
 
   public void fetch() throws IOException {
     try {
-      info("Fetching feed: " + feedName);
-      List<SyndEntry> filteredEntries = new ArrayList<>();
-      filteredEntries.addAll(getArchivedEntries());
-      info("starting with " + filteredEntries.size() + " archived entries");
+      info("Fetching feed: " + feedName + " at " + feedUrl);
+      List<SyndEntry> allEntries = new ArrayList<>();
+      allEntries.addAll(getArchivedEntries());
+      info("starting with " + allEntries.size() + " archived entries");
+      info("fetching live entries from " + feedUrl);
       final SyndFeed feed = feedReader.build(new XmlReader(feedUrl));
-      for (SyndEntry entry : feed.getEntries()) {
-        info("Filtering with filter: " + filter);
-        final SyndEntry filtered = filter.filter(entry);
-        if (filtered != null) {
-          info("Entry passed filter. Published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate());
-          filteredEntries.add(filtered);
-        } else {
-          info("Entry did NOT pass filter. Published: " + entry.getPublishedDate() + ", updated: " + entry.getUpdatedDate());
-        }
-      }
-      info("Feed archiveFilter fetching latest entries: " + filteredEntries.size());
-      filteredEntries = dedupe.dedupe(filteredEntries);
-      info("Feed archiveFilter deduplication: " + filteredEntries.size());
+      info("found " + feed.getEntries().size() + " live entries. Adding to archived entries...");
+      allEntries.addAll(feed.getEntries());
+      info("All entries size before dedupe: " + allEntries.size());
+      allEntries = dedupe.dedupe(allEntries);
+      info("All entries after dedupe: " + allEntries.size());
       final String extension = FilenameUtils.getExtension(feedName);
       final File archive = new File(workingDir, PERSISTENCE_PATH + "/" + feedName.replace("." + extension, "-" + sequenceGenerator.next() + "." + extension));
       final File publish = new File(workingDir, feedName);
       FileUtils.forceMkdir(archive.getParentFile());
-      feed.setEntries(filteredEntries);
-      info("Writing feed archive: " + archive);
+      feed.setEntries(allEntries);
+      info("Writing " + feed.getEntries().size() + " entries to feed archive: " + archive + " and to published: " + publish);
       feedWriter.output(feed, archive);
       feedWriter.output(feed, publish);
 
