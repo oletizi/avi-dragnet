@@ -89,10 +89,7 @@ public class FeedPersister {
       info("Found " + entries.size() + " saved entries before filtering with archive filter: " + archiveFilter);
       for (SyndEntry entry : entries) {
         if (archiveFilter.filter(entry) != null) {
-          final SyndEntry filtered = feedFilter.filter(entry);
-          if (filtered != null) {
-            rv.add(filtered);
-          }
+          rv.add(entry);
         }
       }
       info("Persisted feed size after archive filter: " + rv.size());
