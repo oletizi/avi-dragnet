@@ -52,7 +52,7 @@ public class Aggregator {
 
       try {
         info("Waiting for feed aggregate: " + url + "...");
-        task.get(3, TimeUnit.SECONDS);
+        task.get(20, TimeUnit.SECONDS);
         info("successfully aggregated feed: " + url);
       } catch (InterruptedException | ExecutionException | TimeoutException e) {
         handleError(e);
