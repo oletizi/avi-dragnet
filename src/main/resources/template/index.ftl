@@ -59,10 +59,6 @@
     <hr>
 </#list>
 
-    <h2>Archives</h2>
-
-    <p></p><a href="archive">Archived feeds &rsaquo;</a></p>
-
     <h2>Logs</h2>
 
     <p><a href="log.txt">Log &rsaquo;</a></p>

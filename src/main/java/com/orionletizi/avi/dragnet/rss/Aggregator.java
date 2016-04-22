@@ -67,10 +67,11 @@ public class Aggregator {
 
       info("Aggregated entries before adding : " + feedConfig.getFeedUrl() + ": " + aggregatedEntries.size());
       info(feedConfig.getFeedUrl() + " contains " + feed[0].getEntries().size() + " entries");
+      final FeedFilter filter = feedConfig.getFilter();
       for (SyndEntry entry : feed[0].getEntries()) {
-        final SyndEntry filtered = feedConfig.getFilter().filter(entry);
+        final SyndEntry filtered = filter.filter(entry);
         if (filtered != null) {
-          info("Entry passed filter...");
+          info("Entry passed filter: " + filter);
           aggregatedEntries.add(filtered);
         }
       }

@@ -40,25 +40,25 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Service {
-  public static final long MAX_DAYS = 1000 * 60 * 60 * 24 * 3;
+  private static final long MAX_DAYS = 1000 * 60 * 60 * 24 * 3;
 
   private static final After MAX_AGE_FILTER = new After(() -> new Date(System.currentTimeMillis() - MAX_DAYS));
 
-  final static String DZONE = "http://feeds.dzone.com/home";
-  final static String INFOQ = "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj";
-  final static String OREILLEY_RADAR = "http://feeds.feedburner.com/oreilly/radar/atom";
-  final static String OREILLEY_FORUMS = "http://forums.oreilly.com/rss/forums/10-oreilly-forums/";
+  private final static String DZONE = "http://feeds.dzone.com/home";
+  private final static String INFOQ = "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj";
+  private final static String OREILLEY_RADAR = "http://feeds.feedburner.com/oreilly/radar/atom";
+  private final static String OREILLEY_FORUMS = "http://forums.oreilly.com/rss/forums/10-oreilly-forums/";
   //final static String QUORA = "https://www.quora.com/rss";
-  final static String SERVER_FAULT = "http://serverfault.com/feeds";
-  final static String STACK_OVERFLOW = "http://stackoverflow.com/feeds/";
+  private final static String SERVER_FAULT = "http://serverfault.com/feeds";
+  private final static String STACK_OVERFLOW = "http://stackoverflow.com/feeds/";
 
-  final static String GGROUPS_AWS = "http://www.bing.com/search?q=site%3Agroups.google.com+((AWS+OR+%22amazon+web+services%22)+AND+(ELB+OR+F5+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22))&format=rss";
-  final static String GGROUPS_MESOS = "http://www.bing.com/search?q=site%3Agroups.google.com+mesos+AND+(%22load+balancing%22+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22service+discovery%22)&format=rss";
-  final static String GGROUPS_NGINX_HAPROXY = "http://www.bing.com/search?q=site%3Agroups.google.com+%22reverse+proxy%22+OR+Nginx+OR+HAProxy&format=rss";
-  final static String GGROUPS_OPENSHIFT = "http://www.bing.com/search?q=site%3Agroups.google.com+((%22OpenShift%22+OR+%22open+shift%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22+OR+F5))&format=rss";
-  final static String GGROUPS_OPENSTACK = "http://www.bing.com/search?q=site%3Agroups.google.com+(OpenStack+OR+%22open+stack%22)++AND+(LBaaS+OR+Octavia+OR+F5+OR+Citrix+OR+A10+OR+Radware)&format=rss";
-  final static String GGROUPS_CLOUD_FOUNDRY = "http://www.bing.com/search?q=site%3Agroups.google.com+(%22cloud+foundry%22+OR+%22cloudfoundry%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancer%22+OR+%22loadbalancing%22+OR+F5)&format=rss";
-  final static String GGROUPS_LOAD_BALANCER = "http://www.bing.com/search?q=site%3Agroups.google.com+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22&format=rss";
+  private final static String GGROUPS_AWS = "http://www.bing.com/search?q=site%3Agroups.google.com+((AWS+OR+%22amazon+web+services%22)+AND+(ELB+OR+F5+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22))&format=rss";
+  private final static String GGROUPS_MESOS = "http://www.bing.com/search?q=site%3Agroups.google.com+mesos+AND+(%22load+balancing%22+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22service+discovery%22)&format=rss";
+  private final static String GGROUPS_NGINX_HAPROXY = "http://www.bing.com/search?q=site%3Agroups.google.com+%22reverse+proxy%22+OR+Nginx+OR+HAProxy&format=rss";
+  private final static String GGROUPS_OPENSHIFT = "http://www.bing.com/search?q=site%3Agroups.google.com+((%22OpenShift%22+OR+%22open+shift%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22+OR+F5))&format=rss";
+  private final static String GGROUPS_OPENSTACK = "http://www.bing.com/search?q=site%3Agroups.google.com+(OpenStack+OR+%22open+stack%22)++AND+(LBaaS+OR+Octavia+OR+F5+OR+Citrix+OR+A10+OR+Radware)&format=rss";
+  private final static String GGROUPS_CLOUD_FOUNDRY = "http://www.bing.com/search?q=site%3Agroups.google.com+(%22cloud+foundry%22+OR+%22cloudfoundry%22)+AND+(%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancer%22+OR+%22loadbalancing%22+OR+F5)&format=rss";
+  private final static String GGROUPS_LOAD_BALANCER = "http://www.bing.com/search?q=site%3Agroups.google.com+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22&format=rss";
 
   private static DragnetConfig.FeedConfig[] feedConfigs;
   private static DragnetFilter dragnetFilter = new DragnetFilter();
@@ -98,7 +98,7 @@ public class Service {
   private final File log;
   private final File errorLog;
 
-  public Service(final int port, final File webroot) throws IOException, FeedException {
+  private Service(final int port, final File webroot) throws IOException, FeedException {
     this.log = new File(webroot, "log.txt");
     this.errorLog = new File(webroot, "error-log.txt");
 
@@ -119,7 +119,7 @@ public class Service {
       info("scheduling feed persister for: " + feedName);
       executor.scheduleWithFixedDelay(() -> {
         try {
-          new FeedPersister(webroot, System::currentTimeMillis, persisterConfig, MAX_AGE_FILTER).fetch();
+          new FeedPersister(webroot, persisterConfig, MAX_AGE_FILTER).fetch();
         } catch (IOException e) {
           log(errorLog, e);
         }
@@ -136,7 +136,7 @@ public class Service {
 
       executor.scheduleWithFixedDelay(() -> {
         try {
-          new FeedPersister(webroot, System::currentTimeMillis, filteredConfig, MAX_AGE_FILTER).fetch();
+          new FeedPersister(webroot, filteredConfig, MAX_AGE_FILTER).fetch();
         } catch (IOException e) {
           log(errorLog, e);
         }
@@ -165,8 +165,7 @@ public class Service {
 
     // Schedule aggregator
 
-    executor.scheduleWithFixedDelay((Runnable) () ->
-
+    executor.scheduleWithFixedDelay(() ->
         {
           try {
             log("Refreshing aggregator feed...");
@@ -176,7 +175,6 @@ public class Service {
             handleError(e);
           }
         }
-
         , 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
 
     this.port = port;
@@ -191,8 +189,7 @@ public class Service {
 
     info("Scheduling the index writer...");
 
-    executor.scheduleWithFixedDelay((Runnable) () ->
-
+    executor.scheduleWithFixedDelay(() ->
         {
           try {
             info("fetching feeds to write index...");
@@ -297,7 +294,7 @@ public class Service {
     }
   }
 
-  public void start() throws IOException, FeedException {
+  private void start() throws IOException, FeedException {
 
     final InetAddress inetAddress = guessAddress();
     if (inetAddress == null) {
