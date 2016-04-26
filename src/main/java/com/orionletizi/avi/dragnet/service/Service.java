@@ -48,9 +48,9 @@ public class Service {
   private final static String INFOQ = "http://www.infoq.com/feed?token=s8sWhq8NCl1T2XMizaXG4rD3eZujOkQj";
   private final static String OREILLEY_RADAR = "http://feeds.feedburner.com/oreilly/radar/atom";
   private final static String OREILLEY_FORUMS = "http://forums.oreilly.com/rss/forums/10-oreilly-forums/";
-  //final static String QUORA = "https://www.quora.com/rss";
   private final static String SERVER_FAULT = "http://serverfault.com/feeds";
   private final static String STACK_OVERFLOW = "http://stackoverflow.com/feeds/";
+  private final static String OPEN_STACK = "https://ask.openstack.org/en/feeds/rss/";
 
   private final static String GGROUPS_AWS = "http://www.bing.com/search?q=site%3Agroups.google.com+((AWS+OR+%22amazon+web+services%22)+AND+(ELB+OR+F5+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22load+balancing%22+OR+%22loadbalancing%22))&format=rss";
   private final static String GGROUPS_MESOS = "http://www.bing.com/search?q=site%3Agroups.google.com+mesos+AND+(%22load+balancing%22+OR+%22load+balancer%22+OR+%22loadbalancer%22+OR+%22service+discovery%22)&format=rss";
@@ -75,14 +75,15 @@ public class Service {
           new BasicFeedConfig(new URL(INFOQ), dragnetFilter, "infoq.xml", 5, true),
           new BasicFeedConfig(new URL(OREILLEY_RADAR), dragnetFilter, "oreilley-radar.xml", 5, true),
           new BasicFeedConfig(new URL(OREILLEY_FORUMS), dragnetFilter, "oreilley-forums.xml", 5, true),
-          //new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
-          new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), googleGroupsFilter, "ggroups-openshift.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), googleGroupsFilter, "ggroups-openstack.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), googleGroupsFilter, "ggroups-cloud-foundry.xml", 120, true),
-          new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), googleGroupsFilter, "ggroups-load-balancer.xml", 120, true)
+          new BasicFeedConfig(new URL(OPEN_STACK), dragnetFilter, "openstack.xml", 1, true)
+//          new BasicFeedConfig(new URL(QUORA), dragnetFilter, "quora.xml", true),
+//          new BasicFeedConfig(new URL(GGROUPS_AWS), googleGroupsFilter, "ggroups-aws.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_MESOS), googleGroupsFilter, "ggroups-mesos.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_NGINX_HAPROXY), googleGroupsFilter, "ggroups-nginx-haproxy.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_OPENSHIFT), googleGroupsFilter, "ggroups-openshift.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_OPENSTACK), googleGroupsFilter, "ggroups-openstack.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_CLOUD_FOUNDRY), googleGroupsFilter, "ggroups-cloud-foundry.xml", 120, true),
+//          new BasicFeedConfig(new URL(GGROUPS_LOAD_BALANCER), googleGroupsFilter, "ggroups-load-balancer.xml", 120, true)
       };
     } catch (MalformedURLException e) {
       e.printStackTrace();

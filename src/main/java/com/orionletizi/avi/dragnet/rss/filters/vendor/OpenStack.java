@@ -12,6 +12,13 @@ public class OpenStack extends AbstractVendorFilter {
                 .add(pattern(".*Octavia.*"))
                 .add(pattern(".*f5.*"))
                 .add(pattern(".*a10.*"))
-                .add(pattern(".*radware.*"))));
+                .add(pattern(".*radware.*"))
+                .add(pattern(".*haproxy.*"))
+                .add(pattern(".*nginx.*"))
+                .add(pattern(".*autoscal.*"))
+                .add(pattern(".*adc.*"))
+                .add(pattern(".*neutron.*"))
+                .add(pattern(".*load\\s*balanc.*"))
+            ));
   }
 }

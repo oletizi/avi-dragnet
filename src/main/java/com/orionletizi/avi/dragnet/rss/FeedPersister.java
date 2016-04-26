@@ -27,6 +27,7 @@ public class FeedPersister {
   private final FeedFilter archiveFilter;
   private final FeedFilter feedFilter;
   private File workingDir;
+  private SSLFeedFetcher sslFeedFetcher;
 
   public FeedPersister(final File workingDir,
                        final DragnetConfig.FeedConfig config,
@@ -37,6 +38,7 @@ public class FeedPersister {
     if (feedUrl == null) {
       throw new IllegalArgumentException("Null feed url.");
     }
+    sslFeedFetcher = new SSLFeedFetcher(feedUrl);
     feedName = config.getName();
     feedFilter = config.getFilter();
     feedReader = new SyndFeedInput();
@@ -51,7 +53,12 @@ public class FeedPersister {
       allEntries.addAll(getPersistedEntries());
       info("starting with " + allEntries.size() + " persisted entries");
       info("fetching live entries from " + feedUrl);
-      final SyndFeed feed = feedReader.build(new XmlReader(feedUrl));
+      SyndFeed feed = null;
+      if (feedUrl.getProtocol().startsWith("https")) {
+        feed = sslFeedFetcher.fetch();
+      } else {
+        feed = feedReader.build(new XmlReader(feedUrl));
+      }
       info("found " + feed.getEntries().size() + " persisted entries. Filtering and adding to persisted entries...");
       //allEntries.addAll(feed.getEntries());
       for (final SyndEntry entry : feed.getEntries()) {
