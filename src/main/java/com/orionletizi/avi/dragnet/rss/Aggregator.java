@@ -11,6 +11,7 @@ import com.rometools.rome.io.SyndFeedOutput;
 import com.rometools.rome.io.XmlReader;
 import org.apache.commons.cli.*;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,6 +44,13 @@ public class Aggregator {
       final Future task = executor.submit(() -> {
         try {
           info("Fetching feed: " + url + "...");
+          if (url.getProtocol().startsWith("file")) {
+            final File feedFile = new File(url.getFile());
+            if (! feedFile.exists()) {
+              info("Feed file not found: " + url);
+              return;
+            }
+          }
           feed[0] = input.build(new XmlReader(url));
           info("Done fetching feed.");
         } catch (Throwable e) {

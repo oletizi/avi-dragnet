@@ -1,14 +1,11 @@
 package com.orionletizi.avi.dragnet.template;
 
-import com.orionletizi.avi.dragnet.service.IndexRenderer;
+import com.orionletizi.avi.dragnet.service.FeedDescriptor;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.orionletizi.util.Assertions.assertTrue;
 
@@ -18,51 +15,11 @@ public class TemplateProcessorTest {
   @Ignore
   public void test() throws Exception {
     final TemplateProcessor processor = new TemplateProcessor("/template");
-    final List<IndexRenderer.FeedDescriptor> feeds = new ArrayList<IndexRenderer.FeedDescriptor>();
-    feeds.add(new IndexRenderer.FeedDescriptor() {
-      @Override
-      public String getName() {
-        return "name";
-      }
-
-      @Override
-      public String getLink() {
-        return "link";
-      }
-
-      @Override
-      public String getLocalRawFeedUrl() {
-        return "raw feed url";
-      }
-
-      @Override
-      public String getLocalFilteredFeedUrl() {
-        return "local filtered url";
-      }
-
-      @Override
-      public String getDescription() {
-        return "description";
-      }
-
-      @Override
-      public int getSize() {
-        return 1;
-      }
-
-      @Override
-      public int getFilteredSize() {
-        return 1;
-      }
-
-      @Override
-      public String getLastUpdated() {
-        return "just now";
-      }
-    });
+    final List<FeedDescriptor> feeds = new ArrayList<>();
+    feeds.add(new FeedDescriptor("name", "description", 1, "http://thelink/", "localrawfeedurl", "localFilteredFeedUrl", 1, "now"));
 
 
-    final Map<String, List<IndexRenderer.FeedDescriptor>> model = new HashMap<>();
+    final Map<String, List<FeedDescriptor>> model = new HashMap<>();
 
     model.put("feeds", feeds);
     final StringWriter writer = new StringWriter();
