@@ -93,8 +93,8 @@ public class Aggregator {
     aggregatedOut.setLink("http://dragnet.aviplayground.com:8080/filtered.xml");
     aggregatedOut.setEntries(aggregatedEntries);
 
-    info("Writing filtered feed to " + config.getOutpuFile());
-    feedWriter.output(aggregatedOut, config.getOutpuFile());
+    info("Writing filtered feed to " + config.getOutputFile());
+    feedWriter.output(aggregatedOut, config.getOutputFile());
 
     info("Done reading feeds.");
   }

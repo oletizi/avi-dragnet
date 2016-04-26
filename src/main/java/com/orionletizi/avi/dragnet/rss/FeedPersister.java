@@ -27,7 +27,6 @@ public class FeedPersister {
   private final FeedFilter archiveFilter;
   private final FeedFilter feedFilter;
   private File workingDir;
-  private SSLFeedFetcher sslFeedFetcher;
 
   public FeedPersister(final File workingDir,
                        final DragnetConfig.FeedConfig config,
@@ -38,7 +37,6 @@ public class FeedPersister {
     if (feedUrl == null) {
       throw new IllegalArgumentException("Null feed url.");
     }
-    sslFeedFetcher = new SSLFeedFetcher(feedUrl);
     feedName = config.getName();
     feedFilter = config.getFilter();
     feedReader = new SyndFeedInput();
@@ -53,15 +51,14 @@ public class FeedPersister {
       allEntries.addAll(getPersistedEntries());
       info("starting with " + allEntries.size() + " persisted entries");
       info("fetching live entries from " + feedUrl);
-      SyndFeed feed = null;
+      SyndFeed liveFeed = null;
       if (feedUrl.getProtocol().startsWith("https")) {
-        feed = sslFeedFetcher.fetch();
+        liveFeed = new SSLFeedFetcher(feedUrl).fetch();
       } else {
-        feed = feedReader.build(new XmlReader(feedUrl));
+        liveFeed = feedReader.build(new XmlReader(feedUrl));
       }
-      info("found " + feed.getEntries().size() + " persisted entries. Filtering and adding to persisted entries...");
-      //allEntries.addAll(feed.getEntries());
-      for (final SyndEntry entry : feed.getEntries()) {
+      info("found " + liveFeed.getEntries().size() + " live entries. Filtering live entries and adding to persisted entries...");
+      for (final SyndEntry entry : liveFeed.getEntries()) {
         final SyndEntry filtered = feedFilter.filter(entry);
         if (filtered != null) {
           allEntries.add(filtered);
@@ -72,9 +69,9 @@ public class FeedPersister {
       allEntries = dedupe.dedupe(allEntries);
       info("All entries after dedupe: " + allEntries.size());
       final File publish = getPublishFile();
-      feed.setEntries(allEntries);
-      info("Writing " + feed.getEntries().size() + " entries to feed file: " + publish);
-      feedWriter.output(feed, publish);
+      liveFeed.setEntries(allEntries);
+      info("Writing " + liveFeed.getEntries().size() + " entries to feed file: " + publish);
+      feedWriter.output(liveFeed, publish);
 
     } catch (FeedException e) {
       throw new IOException(e);

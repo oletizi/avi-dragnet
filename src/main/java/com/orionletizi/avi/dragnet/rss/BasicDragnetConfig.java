@@ -20,7 +20,7 @@ public class BasicDragnetConfig implements DragnetConfig {
   }
 
   @Override
-  public File getOutpuFile() {
+  public File getOutputFile() {
     return outputFile;
   }
 

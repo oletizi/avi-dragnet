@@ -8,7 +8,7 @@ public interface DragnetConfig {
 
   FeedConfig[] getFeeds();
 
-  File getOutpuFile();
+  File getOutputFile();
 
   public interface FeedConfig {
 

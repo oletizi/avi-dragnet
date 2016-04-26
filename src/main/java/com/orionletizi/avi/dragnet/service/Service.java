@@ -24,7 +24,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +38,7 @@ public class Service {
   private final Aggregator aggregator;
   private final File log;
   private final File errorLog;
+  private final ScheduledThreadPoolExecutor executor;
   private ServiceConfig config;
 
   private Service(final ServiceConfig config) throws IOException, FeedException {
@@ -46,33 +46,32 @@ public class Service {
     this.log = new File(config.getWebRoot(), "log.txt");
     this.errorLog = new File(config.getWebRoot(), "error-log.txt");
 
-    final ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(config.getFeedConfigs().length + 3);
+    executor = new ScheduledThreadPoolExecutor(config.getFeedConfigs().length + 3);
 
-    // set up index renderer
+    // set up index page renderer
     info("Scheduling the index writer...");
     executor.scheduleWithFixedDelay(new IndexWriter(this, new IndexRenderer()), 0, 10, TimeUnit.SECONDS);
 
-    // set up a persisting feed fetcher for each feed
+    // Set up a persisting feed fetchers for each feed.
+    // This periodically fetches new feed entries and adds them to the local feed file.
+    // It also purges older entries to ensure the feed file doesn't grow without bounds.
+    // There are two persisters per feed:
+    // 1. The raw feed contents
+    // 2. The filtered feed contents
     final DragnetConfig.FeedConfig[] dragnetFeeds = new DragnetConfig.FeedConfig[config.getFeedConfigs().length];
     for (int i = 0; i < config.getFeedConfigs().length; i++) {
       final DragnetConfig.FeedConfig feedConfig = config.getFeedConfigs()[i];
       final String feedName = feedConfig.getName();
       final String filteredFeedName = getFilteredFeedName(feedName);
-      final BasicFeedConfig persisterConfig = new BasicFeedConfig(
+
+      info("scheduling feed persister for: " + feedName);
+      final BasicFeedConfig unfilteredConfig = new BasicFeedConfig(
           feedConfig.getFeedUrl(),
           entry -> entry,
           feedName,
           feedConfig.getRefreshPeriodMinutes(),
           true);
-
-      info("scheduling feed persister for: " + feedName);
-      executor.scheduleWithFixedDelay(() -> {
-        try {
-          new FeedPersister(config.getWebRoot(), persisterConfig, MAX_AGE_FILTER).fetch();
-        } catch (IOException e) {
-          log(errorLog, "Error fetching feed: " + persisterConfig.getFeedUrl() + "; exception: " + e);
-        }
-      }, 0, feedConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
+      scheduleFeedPersister(unfilteredConfig);
 
       info("scheduling a filtering feed persistor for: " + feedName);
       final BasicFeedConfig filteredConfig = new BasicFeedConfig(
@@ -82,15 +81,9 @@ public class Service {
           feedConfig.getRefreshPeriodMinutes(),
           true
       );
+      scheduleFeedPersister(filteredConfig);
 
-      executor.scheduleWithFixedDelay(() -> {
-        try {
-          new FeedPersister(config.getWebRoot(), filteredConfig, MAX_AGE_FILTER).fetch();
-        } catch (IOException e) {
-          log(errorLog, e);
-        }
-      }, 0, filteredConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
-
+      // Set up the feed configs for the aggregator (it needs to read from the local persisted feeds
       dragnetFeeds[i] = new BasicFeedConfig(
           new File(config.getWebRoot(), filteredFeedName).toURI().toURL(),
           event -> event,//config.getFilter(),
@@ -98,7 +91,8 @@ public class Service {
           feedConfig.getRefreshPeriodMinutes(),
           false);
     }
-    // Set up the aggregator to aggregate and aggregate the persisted, filtered feeds
+
+    // Set up the aggregator to aggregate the persisted, filtered feeds
     this.aggregator = new Aggregator(new DragnetConfig() {
       @Override
       public DragnetConfig.FeedConfig[] getFeeds() {
@@ -106,27 +100,36 @@ public class Service {
       }
 
       @Override
-      public File getOutpuFile() {
+      public File getOutputFile() {
         return new File(config.getWebRoot(), "filtered.xml");
       }
 
     });
 
-    // Schedule aggregator
+    // Schedule aggregator to aggregate all of the separate feed files into a single feed file
+    executor.scheduleWithFixedDelay(() -> {
+      try {
+        log("Refreshing aggregator feed...");
+        aggregator.aggregate();
+        log("Done refreshing aggregator feed.");
+      } catch (Throwable e) {
+        handleError(e);
+      }
+    }, 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
+  }
 
-    executor.scheduleWithFixedDelay(() ->
-        {
-          try {
-            log("Refreshing aggregator feed...");
-            aggregator.aggregate();
-            log("Done refreshing aggregator feed.");
-          } catch (Throwable e) {
-            handleError(e);
-          }
-        }
-        , 0, REFRESH_PERIOD_IN_MINUTES, TimeUnit.MINUTES);
-
-
+  private void scheduleFeedPersister(final DragnetConfig.FeedConfig feedConfig) {
+    final Runnable task = () -> {
+      try {
+        info("Fetching and persisting " + feedConfig.getFeedUrl() + "...");
+        new FeedPersister(config.getWebRoot(), feedConfig, MAX_AGE_FILTER).fetch();
+        info("Done fetching and persisting " + feedConfig.getFeedUrl());
+      } catch (IOException e) {
+        Service.this.log(errorLog, "Error fetching feed: " + feedConfig.getFeedUrl() + "; exception: " + e);
+      }
+    };
+    task.run();
+    executor.scheduleWithFixedDelay(task, 0, feedConfig.getRefreshPeriodMinutes(), TimeUnit.MINUTES);
   }
 
   DragnetConfig.FeedConfig[] getFeedConfigs() {
